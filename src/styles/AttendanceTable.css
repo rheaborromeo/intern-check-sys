@@ -16,11 +16,19 @@
 }
 
 .attendance-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 15px;
-  margin-top: 15px;
+  margin-top: 18px;
   text-align: center;
+}
+
+.sub-text-class {
+  text-align: center;
+  color: #111111;
+  margin-top: -11px;
+  font-weight: 300px;
+  font-size: 16px;
 }
 
 .button-container {
@@ -64,11 +72,11 @@
 
 /* When sidebar collapses */
 .attendance-container.collapsed .attendance-content {
-  margin-left: 80px; /* Adjust this value based on your Sidebar collapsed width */
+  margin-left: 74px; /* Adjust this value based on your Sidebar collapsed width */
 }
 
 .attendance-container.expanded .attendance-content {
-  margin-left: 215px; /* Adjust this value based on your Sidebar expanded width */
+  margin-left: 194px; /* Adjust this value based on your Sidebar expanded width */
 }
 
 .attendance-tabs {

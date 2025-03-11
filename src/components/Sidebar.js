@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Layout, Menu, message } from "antd";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined, LogoutOutlined} from "@ant-design/icons";
 import "../styles/Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import { postRequest } from "../utils/apicalls";
@@ -56,7 +56,7 @@ const Sidebar = ({ collapsed, onCollapse }) => {
         <img src={internCheckLogo} alt="Intern Check" className="web-logo" />
       </div>
       <Menu theme="dark" mode="vertical" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1" icon={<UserOutlined />}> Attendance </Menu.Item>
+        <Menu.Item key="1" icon={<ClockCircleOutlined />}> Attendance </Menu.Item>
         <Menu.Item key="2" className="logout-btn" icon={<LogoutOutlined />} onClick={handleLogout}> Logout </Menu.Item>
       </Menu>
     </Sider>

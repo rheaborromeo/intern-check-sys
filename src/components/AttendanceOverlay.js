@@ -4,6 +4,7 @@ import { ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "../styles/AttendanceOverlay.css";
 import { postRequest } from "../utils/apicalls";
+import { Divider } from 'antd';
 
 const AttendanceOverlay = ({ onSubmit }) => {
   const navigate = useNavigate(); // For navigation back
@@ -110,9 +111,9 @@ const AttendanceOverlay = ({ onSubmit }) => {
 </div>
 
         <div className="time-section">
-          <strong className="session-class">
+          <h3 className="session-class">
             {session.charAt(0).toUpperCase() + session.slice(1)} Session
-          </strong>
+          </h3>
           <div className="time-buttons">
             <Button
               type="primary"
@@ -128,6 +129,19 @@ const AttendanceOverlay = ({ onSubmit }) => {
             >
               Time Out
             </Button>
+          </div>
+
+          <Divider />
+
+          <div className="work-mode-btn" style={{ marginTop: "35px" }}>
+            <h3 className="work-mode-text">Work Mode</h3>
+            <Button type="primary" className="mode-button">
+              F2F
+              </Button>
+            <Button type="default" className="mode-button">
+              Remote
+              </Button>
+      
           </div>
         </div>
       </div>

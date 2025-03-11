@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-.logo {
+/* .logo {
   height: 64px;
   display: flex;
   align-items: center;
@@ -21,7 +21,7 @@
   margin-bottom: 10px;
   padding: 0 15px;
   transition: all 0.3s ease-in-out;
-}
+} */
 
 .fixed-sidebar .ant-menu {
   flex: 1;
@@ -36,7 +36,7 @@
 /* Logo default size */
 .web-logo {
   height: 90px;
-  width: 75%;
+  width: 71%;
   transition: all 0.3s ease-in-out;
   justify-content: center;
   margin-left: -10px;
@@ -45,5 +45,5 @@
 /* Enlarge logo when sidebar is collapsed */
 .fixed-sidebar.collapsed .web-logo {
   height: 84px; /* Enlarged size */
-  width: 350px;
+ 
 }

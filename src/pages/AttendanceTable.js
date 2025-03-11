@@ -46,7 +46,7 @@ const AttendanceTable = () => {
   const columns = [
     { title: "Date", dataIndex: "date", key: "date" },
     {
-      title: "Mode (F2F/Remote)",
+      title: "F2F/Remote",
       dataIndex: "mode",
       key: "mode",
       render: (text) => text && <Tag color={text === "F2F" ? "blue" : "green"}>{text}</Tag>,
@@ -89,6 +89,7 @@ const AttendanceTable = () => {
 
       <div className="attendance-content">
         <h2 className="attendance-title">Attendance Record</h2>
+        <p className="sub-text-class">MYT SoftDev Solutions, Inc.</p>
 
         <div className="button-container">
           <Button type="primary" onClick={() => navigate("/make_attendance")} className="attendance-button">

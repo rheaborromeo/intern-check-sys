@@ -16,9 +16,9 @@
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 720px; /* Bigger Width */
+  width: 420px; /* Bigger Width */
   max-width: 90%; /* Ensures responsiveness */
-  height: 350px; /* Bigger Height */
+  height: 580px; /* Bigger Height */
   max-height: 90vh; /* Prevents overflow */
   display: flex;
   flex-direction: column;
@@ -47,6 +47,7 @@
   gap: 12px;
   align-items: center; /* Ensures buttons stay centered */
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 /* Prevents buttons from stretching while keeping them uniform */
@@ -61,6 +62,36 @@
   transition: all 0.3s ease-in-out; /* Smooth transition on hover */
 }
 
+.work-mode-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center; /* Ensures buttons stay centered */
+  border-radius: 10px;
+ 
+}
+
+.work-mode-btn button {
+  width: auto;
+  min-width: 280px;
+  min-height: 40px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 600; /* Consistent button weight */
+  letter-spacing: 0.5px; /* Adds a slight space between letters */
+  transition: all 0.3s ease-in-out; /* Smooth transition on hover */
+}
+
+.work-mode-text {
+  display: block;
+  font-weight: normal;
+  margin-bottom: 26px; /* Adds space between session header and buttons */
+  font-size: 19px;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.8px; /* Adds spacing between letters for clarity */
+  text-transform: capitalize; /* Capitalizes the first letter of the session */
+  color: #333; /* Dark color for better readability */
+}
 
 
 /* Close button positioned on top right */
@@ -99,11 +130,17 @@
   .box-container {
     width: 90%; /* Uses more screen space */
     max-width: 600px; /* Scales down slightly */
-    height: 340px; /* Adjust height slightly */
+    height: 540px; /* Adjust height slightly */
     padding: 18px;
   }
 
   .time-buttons button {
+    min-width: 140px;
+    font-size: 15px;
+    padding: 9px 14px;
+  }
+
+  .work-mode-btn button {
     min-width: 140px;
     font-size: 15px;
     padding: 9px 14px;
@@ -124,6 +161,16 @@
     font-size: 14px;
     padding: 8px 12px;
   }
+
+  .work-mode-btn button {
+    min-width: 130px;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .session-class {
+    font-size: 14px; /* Slightly larger font for better readability */
+  }
 }
 
 /* Extra Small Screens (Very Small Phones) */
@@ -140,4 +187,10 @@
     font-size: 13px;
     padding: 7px 10px;
   }
+
+  .work-mode-btn button {
+    min-width: 120px;
+    font-size: 13px;
+    padding: 7px 10px;
+  } 
 }
