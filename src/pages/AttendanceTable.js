@@ -16,9 +16,17 @@ const AttendanceTable = () => {
     fetchAttendance(currentPage);
   }, [currentPage]);
 
+ 
   const fetchAttendance = async (page) => {
+    console.log("Logout button clicked!");
+
+    const email = localStorage.getItem("email");
+    const id = localStorage.getItem("internId");
+    const token = localStorage.getItem("authToken");
+    const payload = { id, token, email };
     try {
-      const response = await getRequest("timesheets/time_in_am", {
+      const response = await getRequest("timesheets/attendance", {
+        payload,
         page: page,
         limit: pageSize,
       });

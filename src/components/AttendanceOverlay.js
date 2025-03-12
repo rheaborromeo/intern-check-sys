@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, message } from "antd";
+import { Button } from "antd";
 import { ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "../styles/AttendanceOverlay.css";
@@ -9,10 +9,6 @@ import { Divider } from "antd";
 const AttendanceOverlay = ({ onSubmit }) => {
   const navigate = useNavigate(); // For navigation back
 
-  const [timeInMorning, setTimeInMorning] = useState(null);
-  const [timeOutMorning, setTimeOutMorning] = useState(null);
-  const [timeInAfternoon, setTimeInAfternoon] = useState(null);
-  const [timeOutAfternoon, setTimeOutAfternoon] = useState(null);
   const [session, setSession] = useState("morning");
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
@@ -31,71 +27,24 @@ const AttendanceOverlay = ({ onSubmit }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleTimeIn = async () => {
-    const timeNow = new Date().toLocaleTimeString();
-    if (session === "morning") {
-      setTimeInMorning(timeNow);
-    } else {
-      setTimeInAfternoon(timeNow);
-    }
+  const handleTimeInOut = async () => {
+    const id = localStorage.getItem('internId');
+    const email = localStorage.getItem('email');
+    const token = localStorage.getItem('authToken');
 
+    if (!id || !email || !token) {
+        console.error('Missing authentication details');
+        return;
+    }
+    const payload = { id, token, email };
+    console.log("Sending request with payload:", payload); //for debugging........
     try {
-      const response = await postRequest(
-        `interns/time_in_${session === "morning" ? "am" : "pm"}`,
-        { timeIn: timeNow }
-      );
-
-      if (response.success) {
-        message.success(
-          `Time In for ${session} session recorded successfully!`
-        );
-      } else {
-        message.error(response.message || `Failed to record Time In.`);
-      }
+        const response = await postRequest('timesheets/time_in_out', payload);
+        console.log('Response:', response.data);
     } catch (error) {
-      message.error(`Failed to record Time In: ${error.message}`);
+        console.error('Error:', error.response ? error.response.data : error.message);
     }
-  };
-
-  const handleTimeOut = async () => {
-    const timeNow = new Date().toLocaleTimeString();
-    if (session === "morning") {
-      setTimeOutMorning(timeNow);
-    } else {
-      setTimeOutAfternoon(timeNow);
-    }
-
-    try {
-      const response = await postRequest(`timesheets/time_out_${session}`, {
-        timeOut: timeNow,
-      });
-
-      if (response.success) {
-        message.success(
-          `Time Out for ${session} session recorded successfully!`
-        );
-
-        const newRecord = {
-          key: Date.now(),
-          id: Date.now(),
-          name: "John Doe",
-          date: new Date().toLocaleDateString(),
-          mode: "F2F",
-          timeIn1: timeInMorning,
-          timeOut1: timeOutMorning,
-          timeIn2: timeInAfternoon,
-          timeOut2: timeOutAfternoon,
-          status: "Pending",
-        };
-
-        onSubmit(newRecord);
-      } else {
-        message.error(response.message || `Failed to record Time Out.`);
-      }
-    } catch (error) {
-      message.error(`Failed to record Time Out: ${error.message}`);
-    }
-  };
+};
 
   return (
     <div className="overlay-container">
@@ -131,23 +80,15 @@ const AttendanceOverlay = ({ onSubmit }) => {
           <div className="time-buttons">
             <Button
               type="primary"
-              onClick={handleTimeIn}
-              disabled={
-                (session === "morning" && !!timeInMorning) ||
-                (session === "afternoon" && !!timeInAfternoon)
-              }
+              onClick={handleTimeInOut}
+             
             >
               Time In
             </Button>
             <Button
               type="default"
-              onClick={handleTimeOut}
-              disabled={
-                (session === "morning" &&
-                  (!timeInMorning || !!timeOutMorning)) ||
-                (session === "afternoon" &&
-                  (!timeInAfternoon || !!timeOutAfternoon))
-              }
+              onClick={handleTimeInOut}
+
             >
               Time Out
             </Button>
