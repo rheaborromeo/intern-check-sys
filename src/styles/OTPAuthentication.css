@@ -1,0 +1,147 @@
+/* Card-style container */
+.otp-container {
+  background: #ffff;
+  max-width: 480px;
+  width: 100%; /* Adjust width for better responsiveness */
+  padding: 20px; /* Adjust padding for better spacing */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Center the container */
+  min-height: 40vh; /* Ensure full height for better alignment */
+  
+}
+
+.otp-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 57px;
+  padding-bottom: 12px;
+}
+
+/* Subtext */
+.otp-subtext {
+  font-size: 13px;
+  color: #999999;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative; /* Add relative positioning */
+}
+
+/* Info text */
+.otp-info {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+/* OTP Input Group */
+.otp-input-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* OTP Input Boxes */
+.otp-input {
+  max-width: 48;
+  height: 44px;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.otp-input:focus {
+  border-color: #007bff;
+}
+
+/* Verify Button */
+.otp-verify-btn {
+  width: 45%;
+  letter-spacing: 9px;
+  height: 45px;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.otp-verify-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Resend OTP Button */
+.otp-resend-btn {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #ddd;
+  background: white;
+  color: black;
+  font-size: 13px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.otp-resend-btn:hover {
+  border-color: #007bff;
+}
+
+/* Title */
+.otp-title {
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 3px; /* Reduce space below the title */
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 400px) {
+  .otp-container {
+    max-width: 280px; /* Adjust for small screens */
+    padding: 20px;
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .otp-header {
+    font-size: 16px;
+  }
+
+  .otp-subtext {
+    font-size: 12px;
+
+  }
+
+  .otp-verify-btn,
+  .otp-resend-btn {
+    font-size: 13px;
+    height: 40px;
+  }
+}
+
+.verify-otp-button {
+  margin-bottom: 8px; /* Adjust this value as needed */
+}
+
+.resend-otp-button {
+  margin-top: 0; /* Ensure there's no top margin */
+}
