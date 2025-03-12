@@ -17,7 +17,7 @@ body {
 
 .login-container {
   width: 400px;
-  min-height: 240px; /* Allow expansion instead of a fixed height */
+  min-height: 380px; /* Allow expansion instead of a fixed height */
   display: flex;
   flex-direction: column;
   justify-content: center; /* Center form elements inside */

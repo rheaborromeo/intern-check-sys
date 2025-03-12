@@ -5,7 +5,6 @@
   align-items: center;
   height: 100vh;
   padding: 20px; /* Ensures spacing on smaller screens */
-  font-family: 'Arial', sans-serif; /* Default font for consistency */
 }
 
 /* The main box styling (Bigger Size) */
@@ -18,7 +17,7 @@
   text-align: center;
   width: 420px; /* Bigger Width */
   max-width: 90%; /* Ensures responsiveness */
-  height: 580px; /* Bigger Height */
+  height: 380px; /* Bigger Height */
   max-height: 90vh; /* Prevents overflow */
   display: flex;
   flex-direction: column;
@@ -27,11 +26,12 @@
   gap: 20px; /* Adds spacing between elements */
   padding-top: 25px; /* Extra padding at the top */
   font-family: 'Roboto', sans-serif; /* Clean and modern font for the box */
+  
 }
 
 /* Adjust margin of the first element */
 .clock-display {
-  margin-top: 35px; /* Ensures it's not too close to the top */
+  margin-top: 45px; /* Ensures it's not too close to the top */
   font-size: 18px;
   display: flex;
   justify-content: center;
@@ -68,6 +68,7 @@
   gap: 12px;
   align-items: center; /* Ensures buttons stay centered */
   border-radius: 10px;
+  
  
 }
 

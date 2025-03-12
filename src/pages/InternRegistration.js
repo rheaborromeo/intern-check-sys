@@ -6,7 +6,7 @@ import { getRequest, postRequest } from "../utils/apicalls";
 
 const { TabPane } = Tabs;
 
-const AdminDashboard = () => {
+const InternRegistration= () => {
   const [collapsed, setCollapsed] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -139,4 +139,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default InternRegistration;

@@ -7,6 +7,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import OTPAuthentication from './pages/OTPAuthentication';
 import AttendanceOverlay from './components/AttendanceOverlay';
+import InternRegistration from './pages/InternRegistration';
 import 'antd/dist/reset.css';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -22,6 +23,7 @@ const App = () => {
         
         <Route path="/admin_login" element={<AdminLogin />} /> 
         <Route path="/admin_dashboard" element={<AdminDashboard />} /> 
+        <Route path="/interns" element={<InternRegistration />} /> 
       </Routes>
     </Router>
   );

@@ -1,14 +1,22 @@
-import React from "react";
-import { Layout, Menu, message } from "antd";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+
+import { Layout, message } from "antd";
+import { Menu } from "antd";
+import { ClockCircleOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import "../styles/Sidebar.css"; // Sidebar styles
 import { useNavigate } from "react-router-dom"; //For redirection
+import internCheckLogo from "../image/inchck_logo.png";
 import axios from "axios"; // Import axios
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 
 const { Sider } = Layout;
 
 const AdminSidebar = ({ collapsed, onCollapse }) => {
+  const navigate = useNavigate();
   const history = useNavigate(); // Initialize useHistory
+   const [selectedKey, setSelectedKey] = useState("1");
+   const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -34,10 +42,40 @@ const AdminSidebar = ({ collapsed, onCollapse }) => {
     }
 };
 
+ // Sync menu selection with the current route
+ useEffect(() => {
+  if (location.pathname.includes("attendance")) {
+    setSelectedKey("1");
+  } else if (location.pathname.includes("interns")) {
+    setSelectedKey("2");
+  } else if (location.pathname.includes("login")) {
+    setSelectedKey(""); // Deselect everything on logout
+  }
+}, [location.pathname]);
 
-  const handleTitleClick = () => {
-    onCollapse(!collapsed);
-  };
+const handleMenuClick = (e) => {
+  setSelectedKey(e.key);
+
+  switch (e.key) {
+    case "1":
+      navigate("/admin_dashboard");
+      break;
+    case "2":
+      navigate("/interns");
+      break;
+    case "3":
+      handleLogout();
+      break;
+    default:
+      break;
+  }
+};
+
+const handleTitleClick = () => {
+  onCollapse(!collapsed);
+};
+
+
 
   return (
     <Sider
@@ -46,14 +84,15 @@ const AdminSidebar = ({ collapsed, onCollapse }) => {
       onCollapse={onCollapse}
       className="fixed-sidebar"
       width={220} 
+     
     >
       <div className="logo" onClick={handleTitleClick} style={{ cursor: "pointer" }}>
-        Intern Check
+        <img src={internCheckLogo} alt="Logo" className="web-logo"/>
       </div>
-      <Menu theme="dark" mode="vertical" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1" icon={<UserOutlined />}> Attendance </Menu.Item>
-        <Menu.Item key="2" className="logout-btn" icon={<LogoutOutlined />} onClick={handleLogout}> Interns</Menu.Item>
-        <Menu.Item key="2" className="logout-btn" icon={<LogoutOutlined />} onClick={handleLogout}> Logout </Menu.Item>
+      <Menu theme="dark" mode="vertical" defaultSelectedKeys={[selectedKey]}  onClick={handleMenuClick}>
+        <Menu.Item key="1" className="attendance-btn" icon={<ClockCircleOutlined />}> Attendance </Menu.Item>
+        <Menu.Item key="2" className="interns-btn" icon={<UserOutlined />}> Interns</Menu.Item>
+        <Menu.Item key="3" className="logout-btn" icon={<LogoutOutlined />}> Logout </Menu.Item>
       </Menu>
     </Sider>
   );

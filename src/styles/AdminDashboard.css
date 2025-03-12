@@ -41,6 +41,10 @@
     color: white !important;
     font-weight: 400 !important;
   }
+
+  .page-header {
+    text-align: center;
+  }
   
   /* Responsive Adjustments */
   @media (max-width: 1024px) {
