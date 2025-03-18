@@ -89,7 +89,7 @@ const handleTitleClick = () => {
       <div className="logo" onClick={handleTitleClick} style={{ cursor: "pointer" }}>
         <img src={internCheckLogo} alt="Logo" className="web-logo"/>
       </div>
-      <Menu theme="dark" mode="vertical" defaultSelectedKeys={[selectedKey]}  onClick={handleMenuClick}>
+      <Menu theme="dark" mode="vertical"  selectedKeys={[location.pathname.includes("interns") ? "2" : "1"]}   onClick={handleMenuClick}>
         <Menu.Item key="1" className="attendance-btn" icon={<ClockCircleOutlined />}> Attendance </Menu.Item>
         <Menu.Item key="2" className="interns-btn" icon={<UserOutlined />}> Interns</Menu.Item>
         <Menu.Item key="3" className="logout-btn" icon={<LogoutOutlined />}> Logout </Menu.Item>

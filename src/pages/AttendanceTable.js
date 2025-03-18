@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Tag, Empty} from "antd";
+import { Table, Button, Tag, Empty, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/apicalls";
 import Sidebar from "../components/Sidebar";
@@ -9,42 +9,61 @@ const AttendanceTable = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasTimedOutToday, setHasTimedOutToday] = useState(false); // NEW state
   const pageSize = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Current Page:", currentPage);
     fetchAttendance(currentPage);
   }, [currentPage]);
 
- 
   const fetchAttendance = async (page) => {
-    console.log("Logout button clicked!");
-
+    console.log("Fetching data for page:", page);
+    setLoading(true);
     const email = localStorage.getItem("email");
     const id = localStorage.getItem("internId");
     const token = localStorage.getItem("authToken");
-    const payload = { id, token, email };
-    try {
-      const response = await getRequest("timesheets/attendance", {
-        payload,
-        page: page,
-        limit: pageSize,
-      });
 
-      if (Array.isArray(response)) {
-        setAttendanceData(response);
+    try {
+      const response = await getRequest(
+        `timesheets/attendance?id=${id}&email=${email}&token=${token}&page=${page}`
+      );
+
+      if (response?.status === "failed") {
+        console.error("Error:", response.message);
+        setAttendanceData([]);
+      } else if (Array.isArray(response?.data)) {
+        setAttendanceData(response.data);
+        checkIfTimedOut(response.data); // NEW function call
       } else {
-        console.error("Unexpected response format:", response);
+        // console.error("Unexpected response format:", response);
         setAttendanceData([]);
       }
     } catch (error) {
       console.error("Error fetching attendance:", error);
       setAttendanceData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to check if the user has timed out today
+  const checkIfTimedOut = (data) => {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
+    
+    const todayRecord = data.find((record) => record.date === today);
+    
+    if (todayRecord && todayRecord.time_out_am && todayRecord.time_out_pm) {
+      setHasTimedOutToday(true);
+    } else {
+      setHasTimedOutToday(false);
     }
   };
 
   const convertTo12HourFormat = (time) => {
-    if (!time) return "";
+    if (!time) return "--";
     const [hours, minutes] = time.split(":").map(Number);
     const suffix = hours >= 12 ? "PM" : "AM";
     const standardHours = hours % 12 || 12;
@@ -54,40 +73,51 @@ const AttendanceTable = () => {
   const columns = [
     { title: "Date", dataIndex: "date", key: "date" },
     {
-      title: "F2F/Remote",
-      dataIndex: "mode",
-      key: "mode",
-      render: (text) => text && <Tag color={text === "F2F" ? "blue" : "green"}>{text}</Tag>,
+      title: "AM Modality",
+      dataIndex: "am_modality",
+      key: "am_modality",
+      render: (text) => text,
     },
     {
       title: "Time In (AM)",
-      dataIndex: "morningTimeIn",
-      key: "morningTimeIn",
+      dataIndex: "time_in_am",
+      key: "time_in_am",
       render: (time) => convertTo12HourFormat(time),
     },
     {
       title: "Time Out (AM)",
-      dataIndex: "morningTimeOut",
-      key: "morningTimeOut",
+      dataIndex: "time_out_am",
+      key: "time_out_am",
       render: (time) => convertTo12HourFormat(time),
     },
     {
+      title: "PM Modality",
+      dataIndex: "pm_modality",
+      key: "pm_modality",
+      render: (text) => text,
+    },
+    {
       title: "Time In (PM)",
-      dataIndex: "afternoonTimeIn",
-      key: "afternoonTimeIn",
+      dataIndex: "time_in_pm",
+      key: "time_in_pm",
       render: (time) => convertTo12HourFormat(time),
     },
     {
       title: "Time Out (PM)",
-      dataIndex: "afternoonTimeOut",
-      key: "afternoonTimeOut",
+      dataIndex: "time_out_pm",
+      key: "time_out_pm",
       render: (time) => convertTo12HourFormat(time),
     },
     {
-      title: "Signature",
-      dataIndex: "signature",
-      key: "signature",
-      render: (signature) => (signature ? signature : ""),
+      title: "Total Hours",
+      dataIndex: "total_hours",
+      key: "total_hours",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => <Tag  color={text === "approved" ? "green" : "default"}>{text}</Tag>,
     },
   ];
 
@@ -100,24 +130,31 @@ const AttendanceTable = () => {
         <p className="sub-text-class">MYT SoftDev Solutions, Inc.</p>
 
         <div className="button-container">
-          <Button type="primary" onClick={() => navigate("/make_attendance")} className="attendance-button">
+          <Button
+            type="primary"
+            onClick={() => navigate("/make_attendance")}
+            className="attendance-button"
+            disabled={hasTimedOutToday} // Disable button if user already timed out
+          >
             Mark Attendance
           </Button>
         </div>
 
         <div className="table-wrapper">
-          <Table
-            dataSource={attendanceData}
-            columns={columns}
-            pagination={{
-              current: currentPage,
-              pageSize: pageSize,
-              onChange: (page) => setCurrentPage(page),
-            }}
-            locale={{ emptyText: <Empty description="No Attendance Records Yet" /> }}
-            className="attendance-table"
-            scroll={{ x: "max-content" }}
-          />
+          <Spin spinning={loading} size="large">
+            <Table
+              dataSource={attendanceData.map((item, index) => ({ ...item, key: index }))}
+              columns={columns}
+              pagination={{
+                current: currentPage,
+                pageSize: pageSize,
+                onChange: (page) => setCurrentPage(page),
+              }}
+              locale={{ emptyText: <Empty description="No Attendance Records Yet" /> }}
+              className="attendance-table"
+              scroll={{ x: "max-content" }}
+            />
+          </Spin>
         </div>
       </div>
     </div>

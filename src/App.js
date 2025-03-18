@@ -6,8 +6,8 @@ import AttendanceTable from './pages/AttendanceTable';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import OTPAuthentication from './pages/OTPAuthentication';
-import AttendanceOverlay from './components/AttendanceOverlay';
-import InternRegistration from './pages/InternRegistration';
+import MarkAttendance from './components/MarkAttendance';
+import InternsTable from './pages/InternsTable';
 import 'antd/dist/reset.css';
 
 const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -19,11 +19,11 @@ const App = () => {
         <Route path="/" exact element={<Login apiUrl={API_BASE_URL} />} />
         <Route path="/dashboard" element={<AttendanceTable />} /> 
         <Route path="/otp_verification" element={<OTPAuthentication />} /> 
-        <Route path="/make_attendance" element={<AttendanceOverlay />} /> 
+        <Route path="/make_attendance" element={<MarkAttendance />} /> 
         
         <Route path="/admin_login" element={<AdminLogin />} /> 
         <Route path="/admin_dashboard" element={<AdminDashboard />} /> 
-        <Route path="/interns" element={<InternRegistration />} /> 
+        <Route path="/interns" element={<InternsTable />} /> 
       </Routes>
     </Router>
   );
