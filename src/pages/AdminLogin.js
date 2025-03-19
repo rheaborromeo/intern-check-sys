@@ -1,86 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button,  Modal } from "antd";
-import { postRequest } from "../utils/apicalls"; // Import the postRequest function from your first code
-import OTPVerification from "./OTPAuthentication";
-import "../styles/InternLogin.css";
-
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Form, Input, Button, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { postRequest } from "../utils/apicalls"; // Importing postRequest
+import "../styles/AdminLogin.css";
+import logo from "../image/logo_.png";
 
 const AdminLogin = () => {
-  const [emailError, setEmailError] = useState(null);
-  const [isOtpVisible, setIsOtpVisible] = useState(false);
-  const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const storedEmail = sessionStorage.getItem("email");
-    const storedOtpVisible = sessionStorage.getItem("isOtpVisible") === "true";
-    if (storedEmail && storedOtpVisible) {
-      setEmail(storedEmail);
-      setIsOtpVisible(storedOtpVisible);
-    }
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    const { email } = values;
+    const { email, password } = values;
 
-    // Validate email format
-    if (!email) {
-      alert("Please input your email!");
+    if (!email || !password) {
+      toast.error("Please input fields", { position: "top-center", autoClose: 2000, closeButton: false });
       return;
     }
-    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-      alert("Please enter a valid email address (e.g., user@gmail.com).");
-      return;
-    }
-    setEmailError(null); // Clear email error
-    setEmail(email);
 
-    const payload = { email };
-
+    setLoading(true);
     try {
-      const response = await postRequest("admin/login", payload); // Use the postRequest from the first code
-      if (response.success) {
-        setIsOtpVisible(true);
-        localStorage.setItem("email", email);
-        localStorage.setItem("isOtpVisible", "true");
+      const response = await postRequest("login", { email, password });
+      console.log("Login Response:", response);
+
+      if (response?.token) {
+        toast.success("Login successful!", {
+          position: "top-right",
+          autoClose: 3000,
+          closeButton: false,
+        });
+
+        // Store user details in localStorage
+        localStorage.setItem("username", email);
+       
+
+        // Navigate to Admin Dashboard
+        setTimeout(() => {
+          navigate("/admin_dashboard");
+        }, 3000);
       } else {
-        alert(response.message || "Login failed!");
+        message.error(response.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error);
-      alert("Login failed!");
+      console.error("Login Error:", error);
+      message.error("Login failed! Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <h2 >Admin Login</h2>
-
+      <img src={logo} alt="Logo" className="login-logo" />
+      <ToastContainer />
       <Form name="login-form" onFinish={onFinish} layout="vertical">
         <Form.Item label="Email" name="email">
-          <Input placeholder="Enter your email" />
+          <Input placeholder="Enter your email" disabled={loading} />
+        </Form.Item>
+
+        <Form.Item label="Password" name="password">
+          <Input.Password placeholder="Enter your password" disabled={loading} />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block className="btn-login">
+          <Button type="primary" htmlType="submit" block className="btn-login" loading={loading}>
             Login
           </Button>
         </Form.Item>
-
-        <div className="error-notification">{emailError}</div>
-
-        <div className="intern-login-link">
-          <a href="/">Login as Intern</a>
+        
+        <div className="admin-login-link">
+          <a href="/admin_login">Login as Intern</a>
         </div>
       </Form>
-
-      <Modal
-        className="modal-otp-centered"
-        visible={isOtpVisible}
-        onCancel={() => setIsOtpVisible(false)}
-        footer={null}
-      >
-        <OTPVerification email={email} />
-      </Modal>
     </div>
   );
 };

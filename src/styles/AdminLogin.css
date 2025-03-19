@@ -15,9 +15,9 @@ body {
   background-color: #f4f4f4; /* Light background for better visibility */
 }
 
-.intern-login-container {
+.login-container {
   width: 400px;
-  min-height: 398px; /* Allow expansion instead of a fixed height */
+  min-height: 480px; /* Allow expansion instead of a fixed height */
   display: flex;
   flex-direction: column;
   justify-content: center; /* Center form elements inside */
@@ -51,7 +51,7 @@ body {
 
 .btn-login button {
   margin-bottom: -20px; /* Add space above the button */
-  margin-top: 10px !important;
+  margin-top: 18px !important;
 }
 
 /* Style the button */

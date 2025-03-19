@@ -131,8 +131,12 @@
   .box-container {
     width: 90%; /* Uses more screen space */
     max-width: 600px; /* Scales down slightly */
-    height: 540px; /* Adjust height slightly */
+    height: 330px; /* Adjust height slightly */
     padding: 18px;
+  }
+
+  .clock-display {
+    margin-top: 20px; /* Moves the clock up */
   }
 
   .time-buttons button {
@@ -146,6 +150,7 @@
     font-size: 15px;
     padding: 9px 14px;
   }
+  
 }
 
 /* Small Screens (Phones, Small Tablets) */
@@ -153,8 +158,12 @@
   .box-container {
     width: 95%; /* Uses more screen space */
     max-width: 420px; /* Prevents it from becoming too wide */
-    height: 330px; /* Adjusted height */
+    height: 230px; /* Adjusted height */
     padding: 15px;
+  }
+
+  .clock-display {
+    margin-top: 10px; /* Moves the clock even higher on smaller screens */
   }
 
   .time-buttons button {
@@ -175,11 +184,11 @@
 }
 
 /* Extra Small Screens (Very Small Phones) */
-@media (max-width: 460px) {
+@media (max-width: 360px) {
   .box-container {
     width: 100%;
     max-width: 350px;
-    height: 550px; /* Maintains usability */
+    height: 230px; /* Maintains usability */
     padding: 12px;
   }
 
