@@ -10,7 +10,7 @@ const AttendanceTable = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [hasTimedOutToday, setHasTimedOutToday] = useState(false); // NEW state
+  const [hasTimedOutToday, setHasTimedOutToday] = useState(false);
   const pageSize = 10;
   const navigate = useNavigate();
 
@@ -36,9 +36,9 @@ const AttendanceTable = () => {
         setAttendanceData([]);
       } else if (Array.isArray(response?.data)) {
         setAttendanceData(response.data);
-        checkIfTimedOut(response.data); // NEW function call
+        checkIfTimedOut(response.data);
       } else {
-        // console.error("Unexpected response format:", response);
+        console.error("Unexpected response format:", response);
         setAttendanceData([]);
       }
     } catch (error) {
@@ -49,15 +49,21 @@ const AttendanceTable = () => {
     }
   };
 
-  // Function to check if the user has timed out today
+  // ✅ Updated function to check if the user has timed out today
   const checkIfTimedOut = (data) => {
-    const today = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
-    
-    const todayRecord = data.find((record) => record.date === today);
-    
-    if (todayRecord && todayRecord.time_out_am && todayRecord.time_out_pm) {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    console.log("Checking timeout records for today:", today, data);
+
+    const todayRecord = data.find((record) => {
+      const recordDate = record.date?.split("T")[0]; // Ensure correct date format
+      return recordDate === today;
+    });
+
+    if (todayRecord?.time_out_am && todayRecord?.time_out_pm) {
+      console.log("✅ User has already timed out for both sessions.");
       setHasTimedOutToday(true);
     } else {
+      console.log("❌ User can still mark attendance.");
       setHasTimedOutToday(false);
     }
   };
@@ -71,7 +77,11 @@ const AttendanceTable = () => {
   };
 
   const columns = [
-    { title: "Date", dataIndex: "date", key: "date" },
+    { title: "Date", 
+      dataIndex: "date", 
+      key: "date",
+      render: (date) =>
+        new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), },
     {
       title: "AM Modality",
       dataIndex: "am_modality",
@@ -117,7 +127,7 @@ const AttendanceTable = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => <Tag  color={text === "approved" ? "green" : "default"}>{text}</Tag>,
+      render: (text) => <Tag color={text === "approved" ? "green" : "default"}>{text}</Tag>,
     },
   ];
 
@@ -134,7 +144,7 @@ const AttendanceTable = () => {
             type="primary"
             onClick={() => navigate("/make_attendance")}
             className="attendance-button"
-            disabled={hasTimedOutToday} // Disable button if user already timed out
+            disabled={hasTimedOutToday} // Disable if user has already timed out
           >
             Mark Attendance
           </Button>

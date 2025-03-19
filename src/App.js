@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/InternLogin'; // login for interns
 // import Dashboard from './pages/Dashboard'; // dashboard for interns
 import AttendanceTable from './pages/AttendanceTable';
-import AdminLogin from './pages/AdminLogin';
+import AdminLogin from "./pages/AdminLogin";  // ✅ Correct Default Import
 import AdminDashboard from './pages/AdminDashboard';
 import OTPAuthentication from './pages/OTPAuthentication';
 import MarkAttendance from './components/MarkAttendance';

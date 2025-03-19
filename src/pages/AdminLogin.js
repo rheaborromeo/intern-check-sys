@@ -12,16 +12,16 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    const { email, password } = values;
+    const { username, password } = values;
 
-    if (!email || !password) {
+    if (!username || !password) {
       toast.error("Please input fields", { position: "top-center", autoClose: 2000, closeButton: false });
       return;
     }
 
     setLoading(true);
     try {
-      const response = await postRequest("login", { email, password });
+      const response = await postRequest("login", { username, password });
       console.log("Login Response:", response);
 
       if (response?.token) {
@@ -32,7 +32,7 @@ const AdminLogin = () => {
         });
 
         // Store user details in localStorage
-        localStorage.setItem("username", email);
+        localStorage.setItem("username", username);
        
 
         // Navigate to Admin Dashboard
@@ -55,7 +55,7 @@ const AdminLogin = () => {
       <img src={logo} alt="Logo" className="login-logo" />
       <ToastContainer />
       <Form name="login-form" onFinish={onFinish} layout="vertical">
-        <Form.Item label="Email" name="email">
+        <Form.Item label="Username" name="username">
           <Input placeholder="Enter your email" disabled={loading} />
         </Form.Item>
 
