@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { postRequest } from "../utils/apicalls"; // Importing postRequest
+import { postRequest } from "../utils/apicalls";
 import "../styles/AdminLogin.css";
 import logo from "../image/logo_.png";
 
@@ -14,36 +14,27 @@ const AdminLogin = () => {
   const onFinish = async (values) => {
     const { username, password } = values;
 
-    if (!username || !password) {
-      toast.error("Please input fields", { position: "top-center", autoClose: 2000, closeButton: false });
-      return;
-    }
-
+    const payload = { 
+      username,
+      password, 
+      requester: 1 // Added requester field with value 1
+  };
     setLoading(true);
     try {
-      const response = await postRequest("login", { username, password });
-      console.log("Login Response:", response);
-
-      if (response?.token) {
-        toast.success("Login successful!", {
-          position: "top-right",
-          autoClose: 3000,
-          closeButton: false,
-        });
-
-        // Store user details in localStorage
-        localStorage.setItem("username", username);
-       
-
-        // Navigate to Admin Dashboard
-        setTimeout(() => {
-          navigate("/admin_dashboard");
-        }, 3000);
-      } else {
-        message.error(response.message || "Login failed. Please try again.");
-      }
+      const response = await postRequest("login", payload);
+      
+      message.success("Login successful!");
+      localStorage.setItem("id", response.id);
+      localStorage.setItem("full_name", response.full_name);
+      localStorage.setItem("username", response.username);
+      localStorage.setItem("role_id", response.role_id);
+      localStorage.setItem("role_name", response.role_name);
+      localStorage.setItem("token", response.token);
+      
+      setTimeout(() => {
+        navigate("/admin_dashboard", { state: { username: response.username } });
+      }, 3000);
     } catch (error) {
-      console.error("Login Error:", error);
       message.error("Login failed! Please try again.");
     } finally {
       setLoading(false);
@@ -55,11 +46,11 @@ const AdminLogin = () => {
       <img src={logo} alt="Logo" className="login-logo" />
       <ToastContainer />
       <Form name="login-form" onFinish={onFinish} layout="vertical">
-        <Form.Item label="Username" name="username">
-          <Input placeholder="Enter your email" disabled={loading} />
+        <Form.Item label="Username" name="username" rules={[{ required: true, message: "Please enter your username!" }]}> 
+          <Input placeholder="Enter your username" disabled={loading} />
         </Form.Item>
 
-        <Form.Item label="Password" name="password">
+        <Form.Item label="Password" name="password" rules={[{ required: true, message: "Please enter your password!" }]}> 
           <Input.Password placeholder="Enter your password" disabled={loading} />
         </Form.Item>
 

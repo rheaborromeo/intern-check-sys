@@ -17,7 +17,7 @@
   text-align: center;
   width: 420px; /* Bigger Width */
   max-width: 90%; /* Ensures responsiveness */
-  height: 380px; /* Bigger Height */
+  height: 340px; /* Bigger Height */
   max-height: 90vh; /* Prevents overflow */
   display: flex;
   flex-direction: column;
@@ -44,7 +44,6 @@
 .time-buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   align-items: center; /* Ensures buttons stay centered */
   border-radius: 10px;
   margin-bottom: 20px;
@@ -109,7 +108,7 @@
 .session-class {
   display: block;
   font-weight: normal;
-  margin-bottom: 26px; /* Adds space between session header and buttons */
+  margin-bottom: 36px; /* Adds space between session header and buttons */
   font-size: 19px;
   font-family: 'Roboto', sans-serif;
   letter-spacing: 0.8px; /* Adds spacing between letters for clarity */

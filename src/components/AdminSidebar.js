@@ -5,7 +5,7 @@ import { ClockCircleOutlined, LogoutOutlined, UserOutlined } from "@ant-design/i
 import "../styles/Sidebar.css"; // Sidebar styles
 import { useNavigate } from "react-router-dom"; //For redirection
 import internCheckLogo from "../image/inchck_logo.png";
-import axios from "axios"; // Import axios
+import { postRequest } from "../utils/apicalls";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -18,29 +18,41 @@ const AdminSidebar = ({ collapsed, onCollapse }) => {
    const [selectedKey, setSelectedKey] = useState("1");
    const location = useLocation();
 
-  const handleLogout = async () => {
+   const handleLogout = async () => {
+    console.log("Logout button clicked!");
+  
+    const username = localStorage.getItem("username");
+    const id = localStorage.getItem("role_id");
+    const token = localStorage.getItem("token");
+  
+    console.log("Retrieved from localStorage:", { username, id, token });
+  
+    const payload = { id, token, username };
+    console.log("Sending logout request with payload:", payload);
+  
     try {
-        // Make an API call to logout
-        const response = await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}interns/logout`,
-            {},
-            { withCredentials: true } // Include cookies in the request
-        );
-
-        if (response.data.status === 'SUCCESS') {
-            // Clear local storage and session storage
-            localStorage.clear();
-            sessionStorage.clear();
-
-            message.success(response.data.message);
-            history.push("/"); // Redirect to login page
-        } else {
-            message.error(response.data.message || "Failed to log out. Please try again.");
-        }
+      const response = await postRequest("/logout", payload);
+  
+      if (response?.message === "Intern logged out successfully.") {
+        message.success("Logout successful! Redirecting to login...");
+  
+        // Clear localStorage and sessionStorage
+        localStorage.clear();
+        sessionStorage.clear();
+  
+        // Ensure navigation happens after storage is cleared
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        message.error(response?.message || "Logout failed.");
+      }
     } catch (error) {
-        message.error("An error occurred. Please try again.");
+      console.error("Logout error:", error);
+      message.error("An error occurred while logging out.");
     }
-};
+  };
+  
 
  // Sync menu selection with the current route
  useEffect(() => {

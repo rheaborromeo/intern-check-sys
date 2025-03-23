@@ -73,11 +73,11 @@
   
   /* When sidebar collapses */
   .attendance-container.collapsed .attendance-content {
-    margin-left: 74px; /* Adjust this value based on your Sidebar collapsed width */
+    margin-left: 73px; /* Adjust this value based on your Sidebar collapsed width */
   }
   
   .attendance-container.expanded .attendance-content {
-    margin-left: 214px; /* Adjust this value based on your Sidebar expanded width */
+    margin-left: 208px !important; /* Adjust this value based on your Sidebar expanded width */
   }
   
   .attendance-tabs {

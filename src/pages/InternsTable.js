@@ -48,6 +48,13 @@ const InternsTable = () => {
 
   const columns = [
     {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      align: "center",
+    },
+
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -65,6 +72,12 @@ const InternsTable = () => {
       key: "email",
       align: "center",
     },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      align: "center",
+    },
   ];
 
 
@@ -78,7 +91,7 @@ const InternsTable = () => {
         <div className="button-container">
           <Button
             type="primary"
-            onClick={() => navigate("/make_attendance")}
+            onClick={() => navigate("/register")}
             className="attendance-button"
           >
             Add Intern

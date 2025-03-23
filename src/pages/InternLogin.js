@@ -6,6 +6,7 @@ import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "../styles/InternLogin.css";
 import logo from "../image/logo_.png";
+import { duration } from "moment";
 
 const InternLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -14,30 +15,32 @@ const InternLogin = () => {
   const onFinish = async (values) => {
     const { email } = values;
     setLoading(true);
+    
+    const payload = { 
+        email, 
+        requester: 1 // Added requester field with value 1
+    };
+
     try {
-      const response = await postRequest("interns/login", { email });
+        const response = await postRequest("interns/login", payload);
 
-      if (response.success) {
-        toast.success("Login successful!", {
-          position: "top-right",
-          autoClose: 2000,
-          closeButton: false,
-        });
+        if (response.success) {
+            message.success("Login successful!");
+            localStorage.setItem("email", email);
 
-        localStorage.setItem("email", email);
-
-        setTimeout(() => {
-          navigate("/otp_verification", { state: { email } });
-        }, 3000);
-      } else {
-        message.error(response.message || "Login failed. Please try again.");
-      }
+            setTimeout(() => {
+                navigate("/otp_verification", { state: { email } });
+            }, 3000);
+        } else {
+            message.error(response.message || "Login failed. Please try again.");
+        }
     } catch (error) {
-      message.error("Login failed! Please try again.");
+        message.error("Login failed! Please try again.");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="intern-login-container">

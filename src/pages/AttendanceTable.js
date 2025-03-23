@@ -136,7 +136,7 @@ const AttendanceTable = () => {
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
 
       <div className="attendance-content">
-        <h2 className="attendance-title">Attendance Record</h2>
+        <h2 className="attendance-title">Daily Time Record</h2>
         <p className="sub-text-class">MYT SoftDev Solutions, Inc.</p>
 
         <div className="button-container">
@@ -146,7 +146,7 @@ const AttendanceTable = () => {
             className="attendance-button"
             disabled={hasTimedOutToday} // Disable if user has already timed out
           >
-            Mark Attendance
+            Time in/out
           </Button>
         </div>
 

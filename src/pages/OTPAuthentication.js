@@ -24,9 +24,15 @@ const OTPAuthentication = () => {
   const handleGenerateOTP = useCallback(async () => {
     try {
       setLoadingGenerate(true);
-      const response = await postRequest("interns/generate_otp", { email });
+     
+      const email = localStorage.getItem("email");
+
+      const payload = {
+        email,
+        requester: 1
+      }
+      const response = await postRequest("interns/generate_otp", payload);
       if (response.success) {
-        message.success(response.message);
         setDeadline(Date.now() + 300000);
         setOtpExpired(false);
       } else {
@@ -37,7 +43,7 @@ const OTPAuthentication = () => {
     } finally {
       setLoadingGenerate(false);
     }
-  }, [email]);
+  }, []);
 
   useEffect(() => {
     if (email && !hasGeneratedOTP.current) {
@@ -50,8 +56,13 @@ const OTPAuthentication = () => {
     if (loadingResend) return; 
 
     setLoadingResend(true);
+
+    const payload = {
+      email,
+      requester: 1
+    }
     try {
-      const response = await postRequest("interns/resend_otp", { email });
+      const response = await postRequest("interns/resend_otp", payload);
 
       if (response.success) { 
         message.success(response.message);
@@ -86,8 +97,6 @@ const OTPAuthentication = () => {
 
       const payload = { email, otp: otpString };
       const response = await postRequest("interns/verify_otp", payload);
-
-      console.log("Backend Response:", response); 
 
       if (
         response.message === "OTP verified successfully." ||

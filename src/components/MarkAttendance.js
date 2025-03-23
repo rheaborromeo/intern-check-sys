@@ -39,9 +39,8 @@
 //   return () => clearInterval(timer); // Cleanup interval
 // }, []);
 
-
 //   const handleTimeInOut = async () => {
-  
+
 //     const id = localStorage.getItem("internId");
 //     const email = localStorage.getItem("email");
 //     const token = localStorage.getItem("authToken");
@@ -132,7 +131,7 @@
 //   useEffect(() => {
 //     const checkTime = () => {
 //       const currentHour = new Date().getHours();
-//       setIsDisabled(currentHour > 16 || (currentHour === 16 && currentMinutes >= 30) && !isTimedInAfternoon); 
+//       setIsDisabled(currentHour > 16 || (currentHour === 16 && currentMinutes >= 30) && !isTimedInAfternoon);
 //       // Disable button after 3 PM AND only disable if no Time In record for the afternoon
 //     };
 //     checkTime();
@@ -249,108 +248,79 @@
 
 //optimized
 import React, { useState, useEffect } from "react";
-import { postRequest, getRequest } from "../utils/apicalls";
-import { Button, Divider, message } from "antd";
+import { postRequest } from "../utils/apicalls";
+import { Button, message } from "antd";
 import { ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../styles/AttendanceOverlay.css";
+import "../styles/MarkAttendance.css";
 
 const MarkAttendance = () => {
   const navigate = useNavigate();
-  const [session, setSession] = useState("morning");
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isTimedInMorning, setIsTimedInMorning] = useState(false);
-  const [isTimedOutMorning, setIsTimedOutMorning] = useState(false);
-  const [isTimedInAfternoon, setIsTimedInAfternoon] = useState(false);
-  const [isTimedOutAfternoon, setIsTimedOutAfternoon] = useState(false);
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinutes = currentTime.getMinutes();
+  const session = currentHour < 12 ? "morning" : "afternoon";
 
-  useEffect(() => {
-    const currentHour = new Date().getHours();
-    setSession(currentHour < 12 ? "morning" : "afternoon");
-  }, []);
+  const [isTimedIn, setIsTimedIn] = useState(
+    localStorage.getItem(`isTimedIn_${session}`) === "true"
+  );
+  const [isTimedOut, setIsTimedOut] = useState(
+    localStorage.getItem(`isTimedOut_${session}`) === "true"
+  );
+  const isTimedInAfternoon =
+    localStorage.getItem("isTimedIn_afternoon") === "true";
 
+  const [currentFormattedTime, setCurrentFormattedTime] = useState(
+    new Date().toLocaleTimeString()
+  );
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
+      setCurrentFormattedTime(new Date().toLocaleTimeString());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const checkTime = () => {
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinutes = now.getMinutes();
-      
-      setIsDisabled((currentHour > 16 || (currentHour === 16 && currentMinutes >= 30)) && !isTimedInAfternoon);
-    };
-
-    checkTime();
-    const timer = setInterval(checkTime, 60000);
-    return () => clearInterval(timer);
-  }, [isTimedInAfternoon]); // React when this value changes
-
-  useEffect(() => {
-    fetchAttendanceStatus();
-  }, [session]); // Fetch attendance when session changes
-
-  const fetchAttendanceStatus = async () => {
-    const id = localStorage.getItem("internId");
-    const email = localStorage.getItem("email");
-    const token = localStorage.getItem("authToken");
-
-    try {
-      const response = await getRequest(`timesheets/attendance?id=${id}&email=${email}&token=${token}`);
-
-      if (response?.status !== "failed" && Array.isArray(response?.data)) {
-        const today = new Date().toISOString().split("T")[0];
-        const todayRecord = response.data.find((record) => record.date?.split("T")[0] === today);
-
-        if (todayRecord) {
-          setIsTimedInMorning(todayRecord.time_in_am ? true : false);
-          setIsTimedOutMorning(todayRecord.time_out_am ? true : false);
-          setIsTimedInAfternoon(todayRecord.time_in_pm ? true : false);
-          setIsTimedOutAfternoon(todayRecord.time_out_pm ? true : false);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching attendance status:", error);
-    }
-  };
+  const todayDate = new Date().toISOString().split("T")[0];
+  if (localStorage.getItem("attendanceDate") !== todayDate) {
+    localStorage.setItem("attendanceDate", todayDate);
+    localStorage.removeItem("isTimedIn_morning");
+    localStorage.removeItem("isTimedOut_morning");
+    localStorage.removeItem("isTimedIn_afternoon");
+    localStorage.removeItem("isTimedOut_afternoon");
+  }
 
   const handleTimeInOut = async () => {
+    if (isTimedOut) return;
     const id = localStorage.getItem("internId");
     const email = localStorage.getItem("email");
     const token = localStorage.getItem("authToken");
 
     try {
-      const response = await postRequest("timesheets/punch", { id, token, email });
-
+      const response = await postRequest("timesheets/punch", {
+        id,
+        token,
+        email,
+      });
       if (response.status === "failed") {
-        toast.error("You've already logged today.", { position: "top-right", autoClose: 2000, closeButton: false });
+        toast.error("You've already logged today.", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         return;
       }
 
-      toast.success("Action successful!", { position: "top-right", autoClose: 3000 });
-
-      if (session === "morning") {
-        setIsTimedInMorning((prev) => !prev); // Toggle state correctly
-        if (!isTimedInMorning) {
-          setIsTimedInMorning(true);
-        } else {
-          setIsTimedOutMorning(true);
-          setSession("afternoon");
-        }
+      toast.success("Action successful!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      if (!isTimedIn) {
+        setIsTimedIn(true);
+        localStorage.setItem(`isTimedIn_${session}`, "true");
       } else {
-        setIsTimedInAfternoon((prev) => !prev);
-        if (!isTimedInAfternoon) {
-          setIsTimedInAfternoon(true);
-        } else {
-          setIsTimedOutAfternoon(true);
-        }
+        setIsTimedOut(true);
+        localStorage.setItem(`isTimedOut_${session}`, "true");
       }
     } catch (error) {
       console.log(error);
@@ -358,41 +328,48 @@ const MarkAttendance = () => {
     }
   };
 
+  const after430PM =
+    currentHour > 16 || (currentHour === 16 && currentMinutes >= 30);
+  const disableButton =
+    (session === "afternoon" && after430PM && !isTimedInAfternoon) ||
+    (session === "morning" && isTimedOut) ||
+    (session === "afternoon" && isTimedOut);
+
+  const hideButtons = session === "morning" && isTimedIn && isTimedOut;
+
   return (
     <div className="overlay-container">
       <ToastContainer />
       <div className="box-container">
-        <Button type="text" icon={<CloseOutlined />} onClick={() => navigate(-1)} className="close-button" />
+        <Button
+          type="text"
+          icon={<CloseOutlined />}
+          onClick={() => navigate(-1)}
+          className="close-button"
+        />
 
         <div className="clock-display">
           <ClockCircleOutlined style={{ marginRight: 8, fontSize: "1.6em" }} />
-          <strong className="current-time">{currentTime}</strong>
+          <strong className="current-time">{currentFormattedTime}</strong>
         </div>
 
         <div className="time-section">
-          <h3 className="session-class">{session.charAt(0).toUpperCase() + session.slice(1)} Session</h3>
+          <h3 className="session-class">
+            {session.charAt(0).toUpperCase() + session.slice(1)} Session
+          </h3>
           <div className="time-buttons">
-            {session === "morning" ? (
-              !isTimedInMorning ? (
-                <Button type="primary" onClick={handleTimeInOut} disabled={isDisabled}>
-                  Time In
-                </Button>
-              ) : !isTimedOutMorning ? (
-                <Button type="default" onClick={handleTimeInOut} disabled={isDisabled}>
-                  Time Out
-                </Button>
-              ) : null
-            ) : !isTimedInAfternoon ? (
-              <Button type="primary" onClick={handleTimeInOut} disabled={isDisabled}>
-                Time In
-              </Button>
-            ) : (
-              <Button type="default" onClick={handleTimeInOut} disabled={!isTimedInAfternoon}>
-                Time Out
-              </Button>
-            )}
+            <Button
+              type={isTimedIn ? "default" : "primary"}
+              onClick={handleTimeInOut}
+              disabled={disableButton}
+            >
+              {isTimedOut
+                ? "Session Completed"
+                : isTimedIn
+                ? "Time Out"
+                : "Time In"}
+            </Button>
           </div>
-          <Divider />
         </div>
       </div>
     </div>
@@ -400,5 +377,3 @@ const MarkAttendance = () => {
 };
 
 export default MarkAttendance;
-
-
