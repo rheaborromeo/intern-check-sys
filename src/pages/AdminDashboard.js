@@ -80,8 +80,9 @@ const AdminDashboard = () => {
   return (
     <div className={`admin-dashboard-container ${collapsed ? "collapsed" : "expanded"}`}>
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
-      
       <div className="admin-dashboard-content">
+      <h3 className="title-header">Monitoring Records</h3>
+      
         <Tabs defaultActiveKey="Pending">
           {/* Pending Tab */}
           <TabPane tab="Pending" key="Pending">
@@ -90,6 +91,7 @@ const AdminDashboard = () => {
               onClick={approveSelected}
               disabled={Object.keys(selectedRecords).length === 0}
               style={{ marginBottom: 10 }}
+              className="approve-btn"
             >
               Approve Selected
             </Button>

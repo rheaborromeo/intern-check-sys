@@ -103,6 +103,36 @@
   background-color: #1890ff;
 }
 
+@media print {
+  /* Hide sidebar */
+  .sidebar-wrapper {
+    display: none !important;
+  }
+
+  /* Expand content area to full width */
+  .attendance-content {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Hide buttons */
+  .button-container {
+    display: none !important;
+  }
+
+  /* Adjust table layout */
+  .attendance-table .ant-table {
+    width: 100% !important;
+  }
+
+  /* Hide pagination */
+  .ant-pagination {
+    display: none !important;
+  }
+}
+
+
+
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {

@@ -18,7 +18,6 @@ const InternLogin = () => {
     
     const payload = { 
         email, 
-        requester: 1 // Added requester field with value 1
     };
 
     try {

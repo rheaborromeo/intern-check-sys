@@ -28,6 +28,7 @@
   
   .ant-table {
     width: 100%;
+    margin-top: -10px;
   }
   
   .ant-table-thead > tr > th,
@@ -43,6 +44,14 @@
   }
 
   .page-header {
+    text-align: center;
+  }
+
+  .approve-btn{
+    justify-content: right;
+  }
+
+  .title-header {
     text-align: center;
   }
   

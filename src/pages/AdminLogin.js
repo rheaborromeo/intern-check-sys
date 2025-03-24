@@ -17,19 +17,14 @@ const AdminLogin = () => {
     const payload = { 
       username,
       password, 
-      requester: 1 // Added requester field with value 1
   };
     setLoading(true);
     try {
       const response = await postRequest("login", payload);
       
       message.success("Login successful!");
-      localStorage.setItem("id", response.id);
-      localStorage.setItem("full_name", response.full_name);
-      localStorage.setItem("username", response.username);
-      localStorage.setItem("role_id", response.role_id);
-      localStorage.setItem("role_name", response.role_name);
       localStorage.setItem("token", response.token);
+    
       
       setTimeout(() => {
         navigate("/admin_dashboard", { state: { username: response.username } });

@@ -27,7 +27,6 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     const token = localStorage.getItem("authToken");
 
     if (!id || !token || !email) {
-      message.warning("User session not found. Redirecting to login...");
       localStorage.clear();
       sessionStorage.clear();
       navigate("/");
@@ -36,8 +35,9 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     }
 
     console.log("Retrieved from localStorage:", { email, id, token });
+    localStorage.setItem("requester", 1);
 
-    const payload = { id, token, email };
+    const payload = { requester: 1, token, email, id};
 
     console.log("Sending logout request with payload:", payload);
 

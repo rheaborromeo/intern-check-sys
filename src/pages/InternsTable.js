@@ -79,8 +79,6 @@ const InternsTable = () => {
       align: "center",
     },
   ];
-
-
   return (
     <div className={`attendance-container ${collapsed ? "collapsed" : "expanded"}`}>
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />

@@ -20,39 +20,41 @@ const AdminSidebar = ({ collapsed, onCollapse }) => {
 
    const handleLogout = async () => {
     console.log("Logout button clicked!");
-  
-    const username = localStorage.getItem("username");
-    const id = localStorage.getItem("role_id");
+
     const token = localStorage.getItem("token");
-  
-    console.log("Retrieved from localStorage:", { username, id, token });
-  
-    const payload = { id, token, username };
+    
+    // Set requester in local storage as required
+    localStorage.setItem("requester", "1");
+
+    const payload = { requester: 1, token };
     console.log("Sending logout request with payload:", payload);
-  
+
     try {
-      const response = await postRequest("/logout", payload);
-  
-      if (response?.message === "Intern logged out successfully.") {
-        message.success("Logout successful! Redirecting to login...");
-  
-        // Clear localStorage and sessionStorage
-        localStorage.clear();
-        sessionStorage.clear();
-  
-        // Ensure navigation happens after storage is cleared
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        message.error(response?.message || "Logout failed.");
-      }
+        const response = await postRequest("/logout", payload);
+
+        if (response?.message === "Logout successfully.") {
+            message.success("Logout successful! Redirecting to login...");
+            console.log("Logout successful");
+
+            // Clear localStorage and sessionStorage after successful logout
+            localStorage.clear();
+            sessionStorage.clear();
+            console.log("cleared.")
+
+            // Ensure navigation happens after storage is cleared
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
+        } else {
+            message.error(response?.message || "Logout failed.");
+            console.log("Logout failed.");
+        }
     } catch (error) {
-      console.error("Logout error:", error);
-      message.error("An error occurred while logging out.");
+        console.error("Logout error:", error);
+        message.error("An error occurred while logging out.");
     }
-  };
-  
+};
+
 
  // Sync menu selection with the current route
  useEffect(() => {
