@@ -22,11 +22,12 @@ const AdminSidebar = ({ collapsed, onCollapse }) => {
     console.log("Logout button clicked!");
 
     const token = localStorage.getItem("token");
+    const id = localStorage.getItem("requester");
     
     // Set requester in local storage as required
     localStorage.setItem("requester", "1");
 
-    const payload = { requester: 1, token };
+    const payload = { requester: id, token };
     console.log("Sending logout request with payload:", payload);
 
     try {

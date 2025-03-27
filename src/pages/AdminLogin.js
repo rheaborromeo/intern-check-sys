@@ -24,8 +24,8 @@ const AdminLogin = () => {
       
       message.success("Login successful!");
       localStorage.setItem("token", response.token);
+      localStorage.setItem("requester", response.id);
     
-      
       setTimeout(() => {
         navigate("/admin_dashboard", { state: { username: response.username } });
       }, 3000);

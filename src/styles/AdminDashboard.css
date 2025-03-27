@@ -13,6 +13,65 @@
     overflow: hidden;
     margin-top: 20px; /* Adjusts spacing from top */
   }
+
+  .approve-btn {
+  background-color:  #019901;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  transition: background 0.3s ease;
+}
+
+.approve-btn:hover {
+  background-color: #13b313 !important;
+}
+
+.disapprove-btn {
+  background-color: #CC0000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.3s ease;
+}
+
+.disapprove-btn:hover {
+  background-color: #ff3f3f !important;
+  color: white !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px !important;
+  margin-bottom: 10px;
+}
+
+.tabs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+  .button-container .ant-btn {
+    font-size: 16px;  /* Increase text size */
+    padding: 10px 20px; /* Ensure balanced padding */
+    height: 46px; /* Set a fixed height */
+    width: 108px; /* Increase button width */
+    display: flex;
+    align-items: center; /* Ensure vertical centering */
+    justify-content: center; /* Ensure horizontal centering */
+    text-align: center;
+  }
+
+
+
+
   
   .admin-dashboard-container.collapsed .admin-dashboard-content {
     margin-left: 80px; /* Adjust for sidebar collapse */

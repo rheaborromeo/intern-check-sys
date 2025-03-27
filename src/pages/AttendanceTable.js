@@ -57,7 +57,7 @@ const AttendanceTable = () => {
   };
 
   const convertTo12HourFormat = (time) => {
-    if (!time) return "--";
+    if (!time) return "";
     const [hours, minutes] = time.split(":").map(Number);
     const suffix = hours >= 12 ? "PM" : "AM";
     const standardHours = hours % 12 || 12;
@@ -69,93 +69,129 @@ const AttendanceTable = () => {
   };
 
   const columns = [
-    { title: "Date", dataIndex: "date", key: "date",
+    { 
+      title: "Date", 
+      dataIndex: "date", 
+      key: "date",
       render: (date) =>
-        new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), },
-    { title: "AM Modality", dataIndex: "am_modality", key: "am_modality" },
-    { title: "Time In (AM)", dataIndex: "time_in_am", key: "time_in_am", render: convertTo12HourFormat },
-    { title: "Time Out (AM)", dataIndex: "time_out_am", key: "time_out_am", render: convertTo12HourFormat },
-    { title: "PM Modality", dataIndex: "pm_modality", key: "pm_modality" },
-    { title: "Time In (PM)", dataIndex: "time_in_pm", key: "time_in_pm", render: convertTo12HourFormat },
-    { title: "Time Out (PM)", dataIndex: "time_out_pm", key: "time_out_pm", render: convertTo12HourFormat },
-    { title: "Total Hours", dataIndex: "total_hours", key: "total_hours" },
-    { title: "Status", dataIndex: "status", key: "status", render: (text) => <Tag color={text === "approved" ? "green" : "default"}>{text}</Tag> },
+        new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), 
+    },
+    { 
+      title: "AM Modality", 
+      dataIndex: "am_modality", 
+      key: "am_modality",
+      render: (text) => text === "Absent" ? "" : text 
+    },
+    { 
+      title: "Time In (AM)", 
+      dataIndex: "time_in_am", 
+      key: "time_in_am", 
+      render: convertTo12HourFormat 
+    },
+    { 
+      title: "Time Out (AM)", 
+      dataIndex: "time_out_am", 
+      key: "time_out_am", 
+      render: convertTo12HourFormat 
+    },
+    { 
+      title: "PM Modality", 
+      dataIndex: "pm_modality", 
+      key: "pm_modality",
+      render: (text) => text === "Absent" ? "" : text 
+    },
+    { 
+      title: "Time In (PM)", 
+      dataIndex: "time_in_pm", 
+      key: "time_in_pm", 
+      render: convertTo12HourFormat 
+    },
+    { 
+      title: "Time Out (PM)", 
+      dataIndex: "time_out_pm", 
+      key: "time_out_pm", 
+      render: convertTo12HourFormat 
+    },
+    { 
+      title: "Total Hours", 
+      dataIndex: "total_hours", 
+      key: "total_hours" 
+    },
+    { 
+      title: "Status", 
+      dataIndex: "status", 
+      key: "status", 
+      render: (text) => text === "absent" ? "" : <Tag color={text === "approved" ? "green" : "default"}>{text}</Tag>
+    },
+    { 
+      title: "Approved by", 
+      dataIndex: "approved_by_name", 
+      key: "approved_by_name", 
+    },
+    { 
+      title: "Approved on", 
+      dataIndex: "approved_on", 
+      key: "approved_on",
+        render: (date) => date ? new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : ""
+    }
   ];
-
+  
+  
   return (
-    <div className={`attendance-container ${collapsed ? "collapsed" : "expanded"}`}>
+    <>
       {/* Sidebar (Hidden in print mode) */}
       <div className="sidebar-wrapper">
         <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
       </div>
-
+  
       {/* Main Content */}
-      <div className="attendance-content">
-        <h2 className="attendance-title">Daily Time Record</h2>
-        <p className="sub-text-class">MYT SoftDev Solutions, Inc.</p>
-
-        <div className="button-container">
-          <Button
-            type="primary"
-            onClick={() => navigate("/make_attendance")}
-            className="attendance-button"
-            disabled={hasTimedOutToday}
-          >
-            Time in/out
-          </Button>
-
-          <Button
-            type="default"
-            onClick={handlePrint}
-            className="print-button"
-            style={{ marginLeft: 10 }}
-          >
-            Print
-          </Button>
-        </div>
-
-        {/* Print area */}
-        <div id="printable-area">
-          <Spin spinning={loading} size="large">
-            <Table
-              dataSource={attendanceData.map((item, index) => ({ ...item, key: index }))}
-              columns={columns}
-              pagination={{
-                current: currentPage,
-                pageSize: pageSize,
-                onChange: (page) => setCurrentPage(page),
-              }}
-              locale={{ emptyText: <Empty description="No Attendance Records Yet" /> }}
-              className="attendance-table"
-              scroll={{ x: "max-content" }}
-            />
-          </Spin>
+      <div className={`attendance-container ${collapsed ? "collapsed" : "expanded"}`}>
+        <div className="attendance-content">
+          <h2 className="attendance-title">Daily Time Record</h2>
+          <p className="sub-text-class">MYT SoftDev Solutions, Inc.</p>
+  
+          <div className="button-container">
+            <Button
+              type="primary"
+              onClick={() => navigate("/make_attendance")}
+              className="attendance-button"
+              disabled={hasTimedOutToday}
+            >
+              Time in/out
+            </Button>
+  
+            <Button
+              type="default"
+              onClick={handlePrint}
+              className="print-button"
+              style={{ marginLeft: 10 }}
+            >
+              Print
+            </Button>
+          </div>
+  
+          {/* Print area */}
+          <div id="printable-area">
+            <Spin spinning={loading} size="large">
+              <Table
+                dataSource={attendanceData.map((item, index) => ({ ...item, key: index }))}
+                columns={columns}
+                pagination={{
+                  current: currentPage,
+                  pageSize: pageSize,
+                  onChange: (page) => setCurrentPage(page),
+                }}
+                locale={{ emptyText: <Empty description="No Attendance Records Yet" /> }}
+                className="attendance-table"
+                scroll={{ x: "max-content" }}
+              />
+            </Spin>
+          </div>
         </div>
       </div>
-
-      {/* Print-only styles */}
-      <style>
-        {`
-          @media print {
-            /* Hide Sidebar in print mode */
-            .sidebar-wrapper {
-              display: none !important;
-            }
-
-            /* Expand attendance content to full width */
-            .attendance-content {
-              width: 100%;
-            }
-
-            /* Hide buttons in print mode */
-            .button-container {
-              display: none;
-            }
-          }
-        `}
-      </style>
-    </div>
+    </>
   );
+  
 };
 
 export default AttendanceTable;

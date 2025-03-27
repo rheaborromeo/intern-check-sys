@@ -72,11 +72,7 @@
 
 /* When sidebar collapses */
 .attendance-container.collapsed .attendance-content {
-  margin-left: 68px; /* Adjust this value based on your Sidebar collapsed width */
-}
-
-.attendance-container.expanded .attendance-content {
-  margin-left: 186px !important; /* Adjust this value based on your Sidebar expanded width */
+  margin-left: 68px !important; /* Adjust this value based on your Sidebar collapsed width */
 }
 
 .attendance-tabs {
@@ -104,32 +100,67 @@
 }
 
 @media print {
-  /* Hide sidebar */
-  .sidebar-wrapper {
+  /* Hide Sidebar */
+  .sidebar-wrapper, .fixed-sidebar {
     display: none !important;
   }
 
-  /* Expand content area to full width */
-  .attendance-content {
+  /* Expand Content */
+  .attendance-container, .attendance-content {
     width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
+    overflow: visible !important; /* Ensures nothing gets hidden */
   }
 
-  /* Hide buttons */
-  .button-container {
+  /* Hide Buttons & Pagination */
+  .button-container, .ant-pagination {
     display: none !important;
   }
 
-  /* Adjust table layout */
+  /* Ensure Table Uses Full Width */
+  .attendance-table .ant-table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: visible !important; /* Prevents right-side cutoff */
+  }
+
   .attendance-table .ant-table {
     width: 100% !important;
+    table-layout: auto !important; /* Ensures flexible column widths */
+    border-collapse: collapse !important;
   }
 
-  /* Hide pagination */
-  .ant-pagination {
-    display: none !important;
+  /* Adjust Table Headers & Cells */
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    text-align: center !important;
+    font-size: 12px !important;
+    padding: 6px !important;
+    white-space: normal !important; /* Allows text wrapping */
+  }
+
+  /* Prevent Row Splitting */
+  .ant-table-tbody > tr {
+    page-break-inside: avoid !important;
+  } 
+
+  .attendance-table {
+    transform: scale(0.9); /* Shrinks table slightly */
+    transform-origin: top left;
+  }
+
+  /* Scale for Small Screens */
+  @media print and (max-width: 800px) {
+    .ant-table {
+      font-size: 10px !important;
+    }
   }
 }
+
+
+
 
 
 

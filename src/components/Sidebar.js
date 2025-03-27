@@ -34,10 +34,9 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       return;
     }
 
-    console.log("Retrieved from localStorage:", { email, id, token });
-    localStorage.setItem("requester", 1);
+    console.log("Retrieved from localStorage:", { email, requester:id, token });
 
-    const payload = { requester: 1, token, email, id};
+    const payload = { requester: id, token, email};
 
     console.log("Sending logout request with payload:", payload);
 
