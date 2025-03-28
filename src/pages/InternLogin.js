@@ -6,7 +6,6 @@ import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "../styles/InternLogin.css";
 import logo from "../image/logo_.png";
-import { duration } from "moment";
 
 const InternLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -16,30 +15,27 @@ const InternLogin = () => {
     const { email } = values;
     setLoading(true);
     
-    const payload = { 
-        email, 
-    };
+    const payload = { email };
 
     try {
-        const response = await postRequest("interns/login", payload);
+      const response = await postRequest("interns/login", payload);
 
-        if (response.success) {
-            message.success("Login successful!");
-            localStorage.setItem("email", email);
+      if (response.success) {
+        message.success("Login successful!");
+        localStorage.setItem("email", email);
 
-            setTimeout(() => {
-                navigate("/otp_verification", { state: { email } });
-            }, 3000);
-        } else {
-            message.error(response.message || "Login failed. Please try again.");
-        }
+        setTimeout(() => {
+          navigate("/otp_verification", { state: { email } });
+        }, 3000);
+      } else {
+        message.error(response.message || "Login failed. Please try again.");
+      }
     } catch (error) {
-        message.error("Login failed! Please try again.");
+      message.error("Login failed! Please try again.");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
+  };
 
   return (
     <div className="intern-login-container">
@@ -80,7 +76,9 @@ const InternLogin = () => {
           </Button>
         </Form.Item>
         <div className="admin-login-link">
-          <a href="/admin_login">Login as admin</a>
+          <Button type="link" onClick={() => navigate("/admin_login")}>
+            Login as admin
+          </Button>
         </div>
       </Form>
     </div>

@@ -56,7 +56,7 @@ const AdminLogin = () => {
         </Form.Item>
         
         <div className="admin-login-link">
-          <a href="/admin_login">Login as Intern</a>
+          <a href="/">Login as Intern</a>
         </div>
       </Form>
     </div>
