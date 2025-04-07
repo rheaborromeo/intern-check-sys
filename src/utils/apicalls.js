@@ -17,7 +17,7 @@ axios.interceptors.response.use(
       message.error("Session expired. Logging out now...");
       setTimeout(() => {
         window.location.href = "/login"; // Redirect to the login page after 1 second
-      }, 1000);
+      }, 1000000000);
     }
     return Promise.reject(error);
   }

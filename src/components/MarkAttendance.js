@@ -45,7 +45,7 @@ const MarkAttendance = () => {
 
   const handleTimeInOut = async () => {
     if (isTimedOut) return;
-    const id = localStorage.getItem("internId");
+    const id = localStorage.getItem("requester");
     const email = localStorage.getItem("email");
     const token = localStorage.getItem("authToken");
 
@@ -56,15 +56,15 @@ const MarkAttendance = () => {
         email,
       });
       if (response.status === "failed") {
-        toast.error("You've already logged today.", {
-          position: "top-right",
+        message.error(response.message, {
+          position: "top-center",
           autoClose: 2000,
         });
         return;
       }
 
-      toast.success("Action successful!", {
-        position: "top-right",
+      message.success(response.message, {
+        position: "top-center",
         autoClose: 3000,
       });
       if (!isTimedIn) {
@@ -74,6 +74,7 @@ const MarkAttendance = () => {
         setIsTimedOut(true);
         localStorage.setItem(`isTimedOut_${session}`, "true");
       }
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       console.log(error);
       message.error("An error occurred. Please try again.");
@@ -86,8 +87,6 @@ const MarkAttendance = () => {
     (session === "afternoon" && after430PM && !isTimedInAfternoon) ||
     (session === "morning" && isTimedOut) ||
     (session === "afternoon" && isTimedOut);
-
-  const hideButtons = session === "morning" && isTimedIn && isTimedOut;
 
   return (
     <div className="overlay-container">

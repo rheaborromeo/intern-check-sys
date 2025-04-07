@@ -1,21 +1,40 @@
-.admin-dashboard-container {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    background-color: white;
-  }
-  
-  .admin-dashboard-content {
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    margin-top: 20px; /* Adjusts spacing from top */
-  }
+/* Base Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-size: 16px;
+  box-sizing: border-box;
+}
 
-  .approve-btn {
-  background-color:  #019901;
+.admin-dashboard-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+.admin-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  border-bottom: none;
+}
+
+.admin-dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  margin-top: 20px;
+}
+
+.approve-btn {
+  background-color: #00189e;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -23,25 +42,21 @@
   margin-bottom: 10px;
   margin-right: 10px;
   transition: background 0.3s ease;
+  justify-content: right;
 }
 
 .approve-btn:hover {
-  background-color: #13b313 !important;
+  background-color: #00189e !important;
 }
 
 .disapprove-btn {
-  background-color: #CC0000;
+  background-color: #00189e;
   color: white;
   border: none;
   padding: 8px 16px;
   cursor: pointer;
   margin-bottom: 10px;
   transition: background 0.3s ease;
-}
-
-.disapprove-btn:hover {
-  background-color: #ff3f3f !important;
-  color: white !important;
 }
 
 .button-container {
@@ -51,90 +66,404 @@
   margin-bottom: 10px;
 }
 
-.tabs-header {
+.button-container .ant-btn {
+  font-size: 16px;
+  padding: 10px 20px;
+  height: 46px;
+  width: 106px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
 }
 
+.admin-dashboard-container.collapsed .admin-dashboard-content {
+  margin-left: 80px;
+}
 
-  .button-container .ant-btn {
-    font-size: 16px;  /* Increase text size */
-    padding: 10px 20px; /* Ensure balanced padding */
-    height: 46px; /* Set a fixed height */
-    width: 108px; /* Increase button width */
-    display: flex;
-    align-items: center; /* Ensure vertical centering */
-    justify-content: center; /* Ensure horizontal centering */
-    text-align: center;
+.ant-tabs {
+  margin-bottom: 16px;
+}
+
+.ant-table {
+  width: 100%;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  text-align: center !important;
+  font-weight: 400 !important;
+}
+
+.admin-monitoring-table .ant-table {
+  width: 100%;
+  border-spacing: 0 !important;
+  border: 1px solid #d9d9d9;
+}
+
+.admin-monitoring-table .ant-table-thead > tr > th,
+.admin-monitoring-table .ant-table-tbody > tr > td {
+  text-align: center !important;
+  font-weight: 400 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.admin-monitoring-table .ant-table-thead > tr > th {
+  color: rgb(243, 243, 243) !important;
+  font-weight: 400 !important;
+  border: 0.2px solid #d9d9d9 !important;
+  box-shadow: none !important;
+  background-clip: padding-box !important;
+  background-color: #052769;
+  padding: 14px 4px;
+  line-height: 1.2 !important;
+  word-break: break-word;
+  white-space: normal !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.admin-monitoring-table .ant-table-thead > tr > th::before {
+  display: none !important;
+}
+
+.page-header {
+  text-align: center;
+}
+
+.title-header {
+  text-align: center;
+}
+
+/* Responsive: max-width 1024px */
+@media (max-width: 1024px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
   }
 
-
-
-
-  
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 80px; /* Adjust for sidebar collapse */
-  }
-  
-  .admin-dashboard-container.expanded .admin-dashboard-content {
-    margin-left: 215px; /* Adjust for sidebar expanded */
-  }
-  
-  .ant-tabs {
-    margin-bottom: 16px;
-  }
-  
   .ant-table {
-    width: 100%;
-    margin-top: -10px;
+    overflow-x: auto;
+    overflow-y: auto;
   }
-  
+
+  .admin-dashboard-content {
+    margin-left: 0 !important;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 90px !important;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 300px;
+  }
+
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td {
-    text-align: center !important;
-    font-weight: 400 !important;
-  }
-  
-  .ant-table-thead > tr > th {
-    background-color: #052769 !important;
-    color: white !important;
-    font-weight: 400 !important;
+    font-size: 14px !important;
   }
 
-  .page-header {
+  .ant-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ant-tabs-tab {
+    flex: 1;
     text-align: center;
   }
 
-  .approve-btn{
-    justify-content: right;
+  .ant-tabs-tab-btn {
+    font-size: 14px;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 80px;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 60px;
+  }
+}
+
+/* Responsive: max-width 768px */
+@media (max-width: 768px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ant-table {
+    overflow-x: auto;
+    min-width: 600px;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 14px !important;
+  }
+
+  .ant-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ant-tabs-tab {
+    flex: 1;
+    text-align: center;
+  }
+
+  .ant-tabs-tab-btn {
+    font-size: 14px;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 0 !important;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 80px !important;
+  }
+}
+
+/* Responsive: max-width 1024px */
+@media (max-width: 1024px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ant-table {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 0 !important;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 90px !important;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 300px;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 14px !important;
+  }
+
+  .ant-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ant-tabs-tab {
+    flex: 1;
+    text-align: center;
+  }
+
+  .ant-tabs-tab-btn {
+    font-size: 14px;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 80px;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 60px;
+  }
+}
+
+/* Responsive: max-width 900px (Tablets and larger phones) */
+@media (max-width: 900px) {
+  .ant-table {
+    font-size: 13px !important;
+    min-width: 700px;
+  }
+
+  .admin-dashboard-content {
+    padding: 16px;
+  }
+
+  .ant-tabs-tab-btn {
+    font-size: 13px;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 340px;
+  }
+}
+
+/* Responsive: max-width 768px */
+@media (max-width: 768px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ant-table {
+    overflow-x: auto;
+    min-width: 600px;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 14px !important;
+  }
+
+  .ant-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ant-tabs-tab {
+    flex: 1;
+    text-align: center;
+  }
+
+  .ant-tabs-tab-btn {
+    font-size: 14px;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 0 !important;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 80px !important;
+  }
+}
+
+/* Responsive: max-width 600px (Small tablets & Large phones) */
+@media (max-width: 600px) {
+  .ant-table {
+    overflow-x: auto;
+    min-width: 500px;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 420px;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 13px !important;
+  }
+
+  .approve-btn,
+  .disapprove-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .admin-dashboard-content {
+    margin-left: 10px !important;
+  }
+}
+
+/* Responsive: max-width 480px (Phones) */
+@media (max-width: 480px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .admin-header-container {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .admin-dashboard-content {
+    margin: 0;
+    padding: 10px;
+  }
+
+  .admin-dashboard-container.collapsed .admin-dashboard-content {
+    margin-left: 80px !important;
+  }
+
+  .ant-table {
+    overflow-x: auto;
+    min-width: 600px;
+    overflow-y: auto;
+  }
+
+  .admin-monitoring-table-wrapper {
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  .approve-btn,
+  .disapprove-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    height: 40px !important;
+    width: 80px !important;
+    font-size: 14px !important;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 10px !important;
   }
 
   .title-header {
-    text-align: center;
+    font-size: 14px;
   }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 1024px) {
-    .admin-dashboard-content {
-      padding: 15px;
-    }
+}
+
+/* Responsive: max-width 400px (Small phones) */
+@media (max-width: 400px) {
+  html, body {
+    height: 100%;
+    overflow: hidden !important;
   }
-  
-  @media (max-width: 768px) {
-    .admin-dashboard-container {
-      flex-direction: column;
-    }
-  
-    .admin-dashboard-content {
-      width: 100%;
-      padding: 10px;
-    }
+
+  .ant-table {
+    overflow-x: auto;
+    min-width: 500px;
   }
-  
-  @media (max-width: 480px) {
-    .admin-dashboard-content {
-      padding: 8px;
-    }
+
+  .approve-btn,
+  .disapprove-btn {
+    font-size: 11px;
+    padding: 5px 10px;
+    height: 35px !important;
+    width: 70px !important;
   }
-  
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 9px !important;
+  }
+
+  .title-header {
+    font-size: 12px;
+  }
+}
+

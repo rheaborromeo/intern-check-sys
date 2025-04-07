@@ -59,6 +59,21 @@ const Sidebar = ({ collapsed, onCollapse }) => {
     }
   };
 
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     // Clear all data from localStorage when the page is about to be unloaded (window/tab closed)
+  //     localStorage.clear();
+  //   };
+  
+  //   // Attach the event listener to the window
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  
+  //   // Cleanup: remove the event listener when the component is unmounted
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);  
+
   useEffect(() => {
     if (location.pathname.includes("attendance")) {
       setSelectedKey("1");

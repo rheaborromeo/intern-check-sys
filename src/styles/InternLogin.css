@@ -1,102 +1,138 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/* internLogin.css */
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh; /* Full screen height */
-  background-color: #f4f4f4; /* Light background for better visibility */
-}
-
+/* Flex container for centering */
 .intern-login-container {
-  width: 400px;
-  min-height: 398px; /* Allow expansion instead of a fixed height */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Center form elements inside */
-  padding: 40px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  @apply flex justify-center items-center min-h-screen bg-gray-100 p-4; /* Padding to avoid edge-clipping on small screens */
 }
 
-/* Add spacing between form elements */
-.login-container > * {
-  margin-bottom: 15px; /* Adjust this value as needed */
+/* Form container with fixed height on all devices */
+.intern-form-container {
+  @apply bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col justify-center w-full p-6 sm:p-8;
+  max-width: 800px;
+  min-width: 0;
+  width: 480px;
+  height: 500px; /* Fixed height on all screen sizes */
+  box-sizing: border-box;
 }
 
-/* Ensure the last element doesn't have margin */
-.login-container > *:last-child {
-  margin-bottom: 0;
-}
-
-/* Style the input field */
-.login-container input[type="email"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 100%; /* Make it full width */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  margin-bottom: 10px; /* Add space below the input */
-}
-
-.btn-login button {
-  margin-bottom: -20px; /* Add space above the button */
-  margin-top: 10px !important;
-}
-
-/* Style the button */
-.login-container button {
-  background-color: #007bff; /* Example blue color */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%; /* Make it full width */
-}
-
-.login-container button:hover {
-  background-color: #0056b3;
-}
-
-.error-notification {
-  color: red;
-  margin-bottom: 10px;
-  min-height: 20px; /* Reserve space to prevent layout shifts */
-  line-height: 0.025vh;
-}
-
-.login-logo {
-  display: block;
-  justify-content: center;
-  margin: -40px  auto 15px auto; /* Center the image and reduce space below */
-  max-width: 100%; /* Ensure the image is responsive */
-  height: auto; /* Maintain aspect ratio */
-  width: 180px;
-  height: 60px;
-  margin-bottom: 15px;
-}
-
-.modal-otp-centered .ant-modal {
-  top: 50% !important; /* Center vertically */
-  left: 50% !important; /* Center horizontally */
-  transform: translate(-50%, -50%) !important; /* Adjust the position to be truly centered */
-  max-width: 500px; /* Optional: Set a max-width to prevent the modal from being too wide */
-}
-
-@media (max-width: 600px) {
-  .login-container {
-    width: 100%; /* Make it more responsive */
-    padding: 20px;
+/* Handle really narrow screens without changing height */
+@media (max-width: 400px) {
+  .intern-form-container {
+    @apply px-6; /* Reduce side padding slightly */
+    width: 360px; /* Ensure it doesn't exceed screen width */
+    height: 410px;
+    
   }
+}
+
+/* Logo styling */
+.login-logo {
+  @apply mx-auto mb-6 w-32 sm:w-40 h-16 object-contain;
+}
+
+/* Admin login link styling */
+.admin-login-link {
+  @apply text-center mt-8 sm:mt-12;
+}
+
+/* Form input styling */
+.input-field {
+  @apply w-full p-3 border border-gray-300 rounded-md text-base;
+  min-height: 45px;
+}
+
+/* Ant Design error message fix */
+.ant-form-item {
+  margin-bottom: 24px;
+}
+
+.ant-form-item-explain {
+  min-height: 22px;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Login button styling */
+.btn-login {
+  @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
+}
+
+@media (max-width: 768px) {
+  .intern-form-container {
+    @apply px-16; /* Reduce side padding slightly */
+  }
+}
+
+/* Logo styling */
+.login-logo {
+  @apply mx-auto mb-6 w-32 sm:w-40 h-16 object-contain;
+}
+
+/* Admin login link styling */
+.admin-login-link {
+  @apply text-center mt-8 sm:mt-12;
+}
+
+/* Form input styling */
+.input-field {
+  @apply w-full p-3 border border-gray-300 rounded-md text-base;
+  min-height: 45px;
+}
+
+/* Ant Design error message fix */
+.ant-form-item {
+  margin-bottom: 24px;
+}
+
+.ant-form-item-explain {
+  min-height: 22px;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Login button styling */
+.btn-login {
+  @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
+}
+
+@media (max-width: 1024px) {
+  .intern-form-container {
+    max-width: 80%; /* Adjust width to fit 1024px screens better */
+    @apply px-10; /* Add some padding, but keep it responsive */
+  }
+}
+
+/* Logo styling */
+.login-logo {
+  @apply mx-auto mb-6 w-36 sm:w-40 h-16 object-contain;
+}
+
+/* Admin login link styling */
+.admin-login-link {
+  @apply text-center mt-8 sm:mt-12;
+}
+
+/* Form input styling */
+.input-field {
+  @apply w-full p-3 border border-gray-300 rounded-md text-base;
+  min-height: 45px;
+}
+
+/* Ant Design error message fix */
+.ant-form-item {
+  margin-bottom: 24px;
+}
+
+.ant-form-item-explain {
+  min-height: 22px;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Login button styling */
+.btn-login {
+  @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
 }

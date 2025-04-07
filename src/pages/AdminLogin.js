@@ -23,7 +23,7 @@ const AdminLogin = () => {
       const response = await postRequest("login", payload);
       
       message.success("Login successful!");
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("authToken", response.token);
       localStorage.setItem("requester", response.id);
     
       setTimeout(() => {

@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tabs, Checkbox, message, Button } from "antd";
+import { Table, Tabs, Checkbox, message, Button, Pagination } from "antd";
 import AdminSidebar from "../components/AdminSidebar";
 import "../styles/AdminDashboard.css";
 import { getRequest, postRequest } from "../utils/apicalls";
+import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
 
 const { TabPane } = Tabs;
 
 const AdminDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [pendingData, setPendingData] = useState([]);
-  const [approvedData, setApprovedData] = useState([]);
-  const [disapprovedData, setDisapprovedData] = useState([]);
-  const [allData, setAllData] = useState([]);
+  const [data, setData] = useState({
+    pending: [],
+    approved: [],
+    disapproved: [],
+    all: [],
+  });
   const [loading, setLoading] = useState(false);
   const [selectedRecords, setSelectedRecords] = useState({});
+  const [pagination, setPagination] = useState({ offset: 0, limit: 10 });
+  const [activeTab, setActiveTab] = useState("pending");
 
   useEffect(() => {
-    fetchAttendance();
-  }, []);
+    fetchAttendance(activeTab, pagination.offset, pagination.limit);
+  }, [activeTab, pagination]);
 
-  const fetchAttendance = async () => {
+  const fetchAttendance = async (status = "pending", offset = 0, limit = 10) => {
     setLoading(true);
     try {
-      const response = await getRequest(`timesheets/list`);
-      console.log("API Response:", response);
+      const token = localStorage.getItem("authToken");
+      const requester = localStorage.getItem("requester");
+      const url = `timesheets/get_timesheets_by_status?token=${token}&requester=${requester}&status=${status}&offset=${offset}&limit=${limit}`;
+      
+      const response = await getRequest(url);
       if (response && response.data) {
-        setAllData(response.data);
-        setPendingData(response.data.filter(item => item.status.toLowerCase() === "pending"));
-        setApprovedData(response.data.filter(item => item.status.toLowerCase() === "approved"));
-        setDisapprovedData(response.data.filter(item => item.status.toLowerCase() === "disapproved"));
+        setData((prevData) => ({
+          ...prevData,
+          [status]: response.data,
+        }));
       }
     } catch (error) {
       console.error("Error fetching attendance:", error);
@@ -38,20 +46,25 @@ const AdminDashboard = () => {
   };
 
   const onSelectChange = (record, checked) => {
-    setSelectedRecords(prev => ({ ...prev, [record.id]: checked }));
+    setSelectedRecords((prev) => ({ ...prev, [record.id]: checked }));
   };
 
   const approveSelected = async () => {
-    const approvedIds = Object.keys(selectedRecords).filter(id => selectedRecords[id]);
+    const approvedIds = Object.keys(selectedRecords).filter(
+      (id) => selectedRecords[id]
+    );
     if (approvedIds.length === 0) {
       message.warning("No records selected for approval.");
       return;
     }
     const requester = localStorage.getItem("requester");
     try {
-      await postRequest("timesheets/approve", { requester, timesheet_ids: approvedIds });
+      await postRequest("timesheets/approve_timesheets", {
+        requester,
+        timesheet_ids: approvedIds,
+      });
       message.success("Selected records approved successfully.");
-      fetchAttendance();
+      fetchAttendance("pending", pagination.offset, pagination.limit);
       setSelectedRecords({});
     } catch (error) {
       message.error("Failed to approve records.");
@@ -59,73 +72,281 @@ const AdminDashboard = () => {
   };
 
   const disapproveSelected = async () => {
-    const disapprovedIds = Object.keys(selectedRecords).filter(id => selectedRecords[id]);
+    const disapprovedIds = Object.keys(selectedRecords).filter(
+      (id) => selectedRecords[id]
+    );
     if (disapprovedIds.length === 0) {
       message.warning("No records selected for disapproval.");
       return;
     }
     const requester = localStorage.getItem("requester");
     try {
-      await postRequest("timesheets/disapprove", { requester, timesheet_ids: disapprovedIds });
+      await postRequest("timesheets/disapprove_timesheets", {
+        requester,
+        timesheet_ids: disapprovedIds,
+      });
       message.success("Selected records disapproved successfully.");
-      fetchAttendance();
+      fetchAttendance("pending", pagination.offset, pagination.limit);
       setSelectedRecords({});
     } catch (error) {
       message.error("Failed to disapprove records.");
     }
   };
 
+  const convertTo12HourFormat = (time) => {
+    if (!time) return "";
+    const [hour, minute] = time.split(":");
+    const date = new Date();
+    date.setHours(hour, minute);
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
+
   const columnsBase = [
-    { title: "Date", dataIndex: "date", key: "date", render: (date) =>
-      new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), },
-    { title: "AM Modality", dataIndex: "am_modality", key: "am_modality", render: (text) => text === "Absent" ? "" : text  },
-    { title: "Time In (AM)", dataIndex: "time_in_am", key: "time_in_am" },
-    { title: "Time Out (AM)", dataIndex: "time_out_am", key: "time_out_am" },
-    { title: "PM Modality", dataIndex: "pm_modality", key: "pm_modality", render: (text) => text === "Absent" ? "" : text  },
-    { title: "Time In (PM)", dataIndex: "time_in_pm", key: "time_in_pm" },
-    { title: "Time Out (PM)", dataIndex: "time_out_pm", key: "time_out_pm" },
-    { title: "Total Hours", dataIndex: "total_hours", key: "total_hours" },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (date) =>
+        new Date(date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      width: 50,
+    },
+    {
+      title: "Setup", 
+      key: "setup",
+      render: (record) => {
+        const formatModality = (modality) => {
+          if (!modality || modality === "Absent") return "";
+          return modality === "FTF" ? "F2F" : modality;
+        };
+        const am = formatModality(record.am_modality || "").trim();
+        const pm = formatModality(record.pm_modality || "").trim();
+        if (!am && !pm) return "-";
+        if (am && pm && am.toLowerCase() === pm.toLowerCase()) return am;
+        if (!am) return pm;
+        if (!pm) return am;
+        return `${am} / ${pm}`;
+      },
+      width: 50,
+    },
+    {
+      title: "Morning",
+      children: [
+        {
+          title: "Start",
+          dataIndex: "time_in_am",
+          key: "time_in_am",
+          render: convertTo12HourFormat,
+          width: 50,
+        },
+        {
+          title: "End",
+          dataIndex: "time_out_am",
+          key: "time_out_am",
+          render: convertTo12HourFormat,
+          width: 50,
+        },
+      ],
+    },
+    {
+      title: "Afternoon",
+      children: [
+        {
+          title: "Start",
+          dataIndex: "time_in_pm",
+          key: "time_in_pm",
+          render: convertTo12HourFormat,
+          width: 50,
+        },
+        {
+          title: "End",
+          dataIndex: "time_out_pm",
+          key: "time_out_pm",
+          render: convertTo12HourFormat,
+          width: 50,
+        },
+      ],
+    },
+    {
+      title: "# of hours",
+      dataIndex: "total_hours",
+      key: "total_hours",
+      width: 50,
+    },
   ];
 
+  const renderPagination = () => (
+    <Pagination
+      current={pagination.offset / pagination.limit + 1}
+      pageSize={pagination.limit}
+      total={data[activeTab]?.length || 0}
+      onChange={(page, pageSize) => {
+        setPagination({ offset: (page - 1) * pageSize, limit: pageSize });
+      }}
+      style={{ marginTop: "16px", textAlign: "right" }}
+    />
+  );
+
   return (
-    <div className={`admin-dashboard-container ${collapsed ? "collapsed" : "expanded"}`}>
+    <div
+      className={`admin-dashboard-container ${
+        collapsed ? "collapsed" : "expanded"
+      }`}
+    >
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
       <div className="admin-dashboard-content">
-        <h3 className="title-header">Monitoring Records</h3>
-        <Tabs defaultActiveKey="Pending">
-          <TabPane tab="Pending" key="Pending">
-          
-            <Table
-              columns={[{ title: "Name", dataIndex: "full_name", key: "full_name" }, ...columnsBase, {
-                title: "Status", key: "select",
-                render: (_, record) => (
-                  <Checkbox
-                    checked={selectedRecords[record.id] || false}
-                    onChange={e => onSelectChange(record, e.target.checked)}
-                  />
-                ),
-              }]}
-              dataSource={pendingData}
-              rowKey="id"
-              loading={loading}
-            />
-            <div className="button-container">
-            <Button type="primary" onClick={approveSelected} className="approve-btn">
-              Approve
-            </Button>
-            <Button type="danger" onClick={disapproveSelected} className="disapprove-btn">
-              Disapprove
-            </Button>
+        <div className="admin-header-container">
+          <img src={mytLogo} alt="MYT Logo" className="myt-logo" />
+          <div className="header-text">
+            <h2 className="company-name">MYT SoftDev Solutions, Inc.</h2>
+            <p className="company-address">
+              301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu
+            </p>
           </div>
+        </div>
+        <h3 className="title-header">Monitoring Records</h3>
+        <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
+          <TabPane tab="Pending" key="pending">
+            <Checkbox
+              onChange={(e) => {
+                const checked = e.target.checked;
+                const updatedSelection = {};
+                data.pending.forEach((record) => {
+                  updatedSelection[record.id] = checked;
+                });
+                setSelectedRecords(updatedSelection);
+              }}
+              checked={
+                data.pending.length > 0 &&
+                data.pending.every((record) => selectedRecords[record.id])
+              }
+              indeterminate={
+                Object.values(selectedRecords).some(Boolean) &&
+                !data.pending.every((record) => selectedRecords[record.id])
+              }
+              style={{ marginBottom: 10 }}
+            >
+              Select All
+            </Checkbox>
+
+            <div className="admin-monitoring-table-wrapper">
+              <Table
+                columns={[
+                  {
+                    title: "",
+                    key: "select",
+                    render: (_, record) => (
+                      <Checkbox
+                        checked={selectedRecords[record.id] || false}
+                        onChange={(e) =>
+                          onSelectChange(record, e.target.checked)
+                        }
+                      />
+                    ),
+                    width: 50,
+                  },
+                  {
+                    title: "Name",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    width: 100,
+                  },
+                  ...columnsBase,
+                ]}
+                dataSource={data.pending}
+                rowKey="id"
+                loading={loading}
+                pagination={false}
+                className="admin-monitoring-table"
+              />
+            </div>
+            {renderPagination()}
+            <div className="button-container">
+              <Button type="primary" onClick={approveSelected} className="approve-btn">
+                Approve
+              </Button>
+              <Button type="danger" onClick={disapproveSelected} className="disapprove-btn">
+                Disapprove
+              </Button>
+            </div>
           </TabPane>
-          <TabPane tab="Approved" key="Approved">
-            <Table columns={[{ title: "Name", dataIndex: "full_name", key: "full_name" }, ...columnsBase]} dataSource={approvedData} rowKey="id" loading={loading} />
+
+          <TabPane tab="Approved" key="approved">
+            <div className="admin-monitoring-table-wrapper">
+              <Table
+                columns={[
+                  {
+                    title: "Name",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    width: 50,
+                  },
+                  ...columnsBase,
+                ]}
+                dataSource={data.approved}
+                rowKey="id"
+                loading={loading}
+                pagination={false}
+                className="admin-monitoring-table"
+              />
+            </div>
+            {renderPagination()}
           </TabPane>
-          <TabPane tab="Disapproved" key="Disapproved">
-            <Table columns={[{ title: "Name", dataIndex: "full_name", key: "full_name" }, ...columnsBase]} dataSource={disapprovedData} rowKey="id" loading={loading} />
+
+          <TabPane tab="Disapproved" key="disapproved">
+            <div className="admin-monitoring-table-wrapper">
+              <Table
+                columns={[
+                  {
+                    title: "Name",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    width: 50,
+                  },
+                  ...columnsBase,
+                ]}
+                dataSource={data.disapproved}
+                rowKey="id"
+                loading={loading}
+                pagination={false}
+                className="admin-monitoring-table"
+              />
+            </div>
+            {renderPagination()}
           </TabPane>
-          <TabPane tab="All" key="All">
-            <Table columns={[{ title: "Name", dataIndex: "full_name", key: "full_name" }, ...columnsBase, { title: "Status", dataIndex: "status", key: "status" }]} dataSource={allData} rowKey="id" loading={loading} />
+
+          <TabPane tab="All" key="all">
+            <div className="admin-monitoring-table-wrapper">
+              <Table
+                columns={[
+                  {
+                    title: "Name",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    width: 50,
+                  },
+                  ...columnsBase,
+                  {
+                    title: "Status",
+                    dataIndex: "status",
+                    key: "status",
+                    width: 50,
+                  },
+                ]}
+                dataSource={data.all}
+                rowKey="id"
+                loading={loading}
+                pagination={false}
+                className="admin-monitoring-table"
+              />
+            </div>
+            {renderPagination()}
           </TabPane>
         </Tabs>
       </div>

@@ -1,11 +1,20 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents unnecessary scroll */
+}
+
 .fixed-sidebar {
   position: fixed;
   left: 0;
   top: 0;
-  height: 100vh; /* Full height */
-  z-index: 1000; /* Ensure it stays above content */
+  height: 100vh !important; /* Force full viewport height */
+  z-index: 1000;
   display: flex;
   flex-direction: column;
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+  width: 250px; /* Default width for larger screens */
 }
 
 .logo {
@@ -28,7 +37,6 @@
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s ease-in-out; /* Smooth transition */
- 
 }
 
 .ant-menu-item-selected {
@@ -51,6 +59,57 @@
 
 /* Enlarge logo when sidebar is collapsed */
 .fixed-sidebar.collapsed .web-logo {
-  height: 84px; /* Enlarged size */
- 
+  height: 84px; /* Reduced size when collapsed */
+}
+
+/* Media queries for different screen sizes */
+
+/* For screens larger than 1024px */
+@media (max-width: 1024px) {
+  .fixed-sidebar {
+    width: 220px; /* Reduce width for medium screens */
+  }
+}
+
+/* For screens between 768px and 1024px (tablets) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .fixed-sidebar {
+    width: 180px; /* Further reduce width for tablet screens */
+  }
+
+  .logo {
+    height: 50px; /* Reduce logo size */
+    font-size: 16px; /* Reduce text size */
+  }
+
+  .web-logo {
+    height: 60px; /* Further reduce logo size */
+    width: 60px;
+  }
+}
+
+/* For screens smaller than 768px (mobile devices) */
+@media (max-width: 768px) {
+  .fixed-sidebar {
+    width: 160px; /* Much smaller width for mobile devices */
+  }
+  
+  .logo {
+    height: 45px; /* Further reduce logo height */
+    font-size: 14px; /* Further reduce font size */
+    padding: 0 10px; /* Adjust padding */
+  }
+
+  .web-logo {
+    height: 50px; /* Smaller logo for mobile */
+    width: 50px;
+  }
+
+  .ant-menu-item {
+    font-size: 14px; /* Smaller text in the menu */
+  }
+
+  .fixed-sidebar.collapsed .web-logo {
+    height: 50px; /* Reduced size when collapsed on mobile */
+  }
 }

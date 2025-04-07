@@ -1,3 +1,4 @@
+/* General Layout Styles */
 .attendance-container {
   display: flex;
   width: 100vw;
@@ -15,12 +16,77 @@
   overflow: hidden;
 }
 
+.main-table-wrapper {
+  max-width: 98%; /* or a specific width like 1000px */
+  max-width: 98%;
+  margin: 0 auto !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  overflow-y: auto !important;
+}
+
+.responsive-table-wrapper {
+  width: 100%;
+  height: 500px; /* Set a specific height for the table */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  max-height: 500px; /* Optional: Set a max height to limit scrollable area */
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-bottom: none;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.company-address {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* Logo Container */
+.logo-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  padding-top: 15px;
+}
+
+.myt-logo {
+  width: 100px;
+  height: auto;
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+/* Attendance Table */
 .attendance-title {
-  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center !important;
+  font-size: 21px !important;
   font-weight: bold !important;
-  margin-bottom: 15px;
-  margin-top: 18px;
-  text-align: center;
+  margin-top: 5px !important;
 }
 
 .sub-text-class {
@@ -37,42 +103,61 @@
   margin-bottom: 10px;
 }
 
+.attendance-button,
+.print-button {
+  margin-top: -10px;
+  font-size: 16px;
+  padding: 10px 20px;
+  width: 90px !important;
+}
+
+.small-button {
+  width: 60px;
+  height: 30px;
+  font-size: 12px;
+}
+
 .attendance-button {
-  white-space: nowrap;
-  height: 40px;
-  margin-bottom: 4px;
+  width: 120px;
+  height: 36px;
+  font-size: 14px;
 }
 
-.table-wrapper {
-  flex-grow: 1;
-  overflow-x: auto; /* Enables horizontal scrolling if needed */
+.print-button {
+  width: 100px;
+  height: 36px;
+  font-size: 14px;
+  padding: 0 12px;
+  margin-left: 10px;
 }
 
+/* Adjusting the Table */
 .attendance-table {
-  width: 100%;
+  width: 100% !important;
+  table-layout: auto; /* Auto layout to prevent column size cutoffs */
+  min-width: 800px; /* Ensure the table doesn't get too small */
 }
 
-.ant-table {
-  width: 100%;
+.attendance-table, .ant-table {
+  width: 100% !important;
 }
 
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
-  text-align: center !important;
-  font-weight: 400 !important;
-  
+.attendance-table .ant-table th, .ant-table td {
+  border: 0.5px solid #4b4a4a;
 }
 
 .attendance-table .ant-table-thead > tr > th {
-  background-color: #052769 !important; /* Change to your preferred color */
-  color: white !important;
-  font-weight:400 !important;
+  background-color: #f0f2f5 !important;
+  height: 15px !important;
+  color: rgb(0, 0, 0) !important;
+  font-weight: 500 !important;
+  border: 0.5px solid #4b4a4a !important; /* <-- Add this line */
+  text-align: center; /* Optional: align text */
 }
 
-
-/* When sidebar collapses */
+/* Sidebar Collapsed */
 .attendance-container.collapsed .attendance-content {
-  margin-left: 68px !important; /* Adjust this value based on your Sidebar collapsed width */
+  margin-left: 68px !important;
 }
 
 .attendance-tabs {
@@ -95,117 +180,272 @@
   font-weight: bold;
 }
 
-.attendance-tabs .ant-tabs-ink-bar {
-  background-color: #1890ff;
+.total-hours-container {
+  text-align: right !important;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-right: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  display: block;
+  width: auto;
+  white-space: nowrap; /* Prevents wrapping */
 }
 
+/* .status-column .status-tag {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: inline-block;
+  font-size: 12px;
+  padding: 0 6px;
+  text-align: center;
+} */
+
+.status-tag {
+  font-size: 12px;
+  padding: 0 6px;
+  text-align: center;
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal; /* allow wrapping */
+  word-wrap: break-word;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns items to the right */
+  align-items: center; /* Aligns items vertically */
+  gap: 10px; /* Adds space between the dropdown and pagination */
+  width: 100%;
+}
+
+.pagination-container .ant-select {
+  width: 120px; /* Adjust width of the dropdown */
+}
+
+.pagination-container .ant-pagination {
+  margin-left: 10px; /* Adds space between the dropdown and pagination */
+}
+
+/* Print Adjustments */
 @media print {
-  /* Hide Sidebar */
-  .sidebar-wrapper, .fixed-sidebar {
+  .ant-table-tbody > tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .responsive-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .attendance-table {
+    min-width: 800px; /* adjust based on actual column widths */
+  }
+  #printable-area {
+    text-align: left !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    margin: 0;
+    width: 100% !important;
+  }
+
+  .header-container {
+    display: flex !important;
+    flex-direction: row !important; /* Ensure elements are in a row */
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    margin: 10px 0 10px 0 ;
+    padding: 0;
+  }
+  .attendance-title {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin: 0 0 10px 0;
+    padding: 0;
+  }
+
+  .header-container img {
+    align-self: flex-start !important; /* Align logo to the left */
+    margin: 0 15px 3px 0; /* Adjust spacing */
+    width: 100px; /* Ensure logo size is maintained */
+    height: auto;
+  }
+
+  .header-text {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
+  }
+  .company-name {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    margin: 0;
+  }
+
+  .company-address {
+    font-size: 14px !important;
+    color: #555 !important;
+    margin: 0;
+  }
+
+  .pagination-container {
+    display: flex;
+  }
+
+  .total-hours-container h3 {
+    text-align: right !important;
+    font-size: 11px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-end !important;
+    align-items: right;
+    width: auto; /* Change to auto to prevent cut-off */
+    max-width: 100%; /* Restrict max width */
+    box-sizing: border-box;
+  }
+  .status-column{
     display: none !important;
   }
 
-  /* Expand Content */
-  .attendance-container, .attendance-content {
+  .sidebar-wrapper,
+  .fixed-sidebar {
+    display: none !important;
+  }
+
+  .attendance-container,
+  .attendance-content {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    overflow: visible !important; /* Ensures nothing gets hidden */
+    overflow: visible !important;
   }
 
-  /* Hide Buttons & Pagination */
-  .button-container, .ant-pagination {
+  .button-container,
+  .ant-pagination,
+  .pagination-container,
+  .ant-select {
     display: none !important;
   }
 
-  /* Ensure Table Uses Full Width */
-  .attendance-table .ant-table-wrapper {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: visible !important; /* Prevents right-side cutoff */
-  }
-
-  .attendance-table .ant-table {
-    width: 100% !important;
-    table-layout: auto !important; /* Ensures flexible column widths */
-    border-collapse: collapse !important;
-  }
-
-  /* Adjust Table Headers & Cells */
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    text-align: center !important;
-    font-size: 12px !important;
-    padding: 6px !important;
-    white-space: normal !important; /* Allows text wrapping */
-  }
-
-  /* Prevent Row Splitting */
-  .ant-table-tbody > tr {
-    page-break-inside: avoid !important;
-  } 
-
   .attendance-table {
-    transform: scale(0.9); /* Shrinks table slightly */
-    transform-origin: top left;
+    transform: scale(1) !important;
+    transform-origin: top center !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      table-layout: auto !important;
   }
 
-  /* Scale for Small Screens */
-  @media print and (max-width: 800px) {
-    .ant-table {
-      font-size: 10px !important;
-    }
+  .ant-table-content table {
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  .attendance-table, .ant-table {
+    border: none !important;
+  }
+  .attendance-content {
+    margin: 0 !important;
   }
 }
 
-
-
-
-
-
-
-/* Responsive Adjustments */
+/* Table Responsiveness */
 @media (max-width: 1024px) {
-  .attendance-content {
-    padding: 15px;
+  .company-name {
+    font-size: 18px;
   }
-
+  .company-address {
+    font-size: 12px;
+  }
   .attendance-title {
-    font-size: 20px;
+    font-size: 16px !important;
   }
-
-  .button-container {
-    justify-content: center;
+  .sub-text-class {
+    font-size: 14px;
+  }
+  .attendance-button,
+  .print-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 14px !important;
   }
 }
 
 @media (max-width: 768px) {
-  .attendance-container {
-    flex-direction: column;
-  }
-
-  .attendance-content {
+  .logo-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Align text properly */
     width: 100%;
-    padding: 10px;
+    padding: 10px 0;
   }
 
-  .attendance-title {
-    font-size: 18px;
+  .header-container {
+    display: flex;
+    flex-direction: column; /* Stack elements */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
   }
 
-  .attendance-button {
+  .myt-logo {
+    width: 80px; /* Resize logo for better fit */
+    height: auto;
+    justify-content: center;
+  }
+
+  .company-name {
     font-size: 14px;
+    padding-right: 10px;
+  }
+
+  .company-address {
+    font-size: 11px;
+    padding-right: 10px;
+  }
+
+  .company-name,
+  .company-address {
+    max-width: 89%; /* Prevents text from stretching too much */
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word; /* Ensures long words break */
+    overflow-wrap: break-word;
   }
 }
 
+/* iPhone SE & Small Screen Adjustments */
 @media (max-width: 480px) {
   .attendance-title {
-    font-size: 16px;
+    font-size: 14px !important;
   }
-
-  .attendance-button {
+  .sub-text-class {
     font-size: 12px;
-    padding: 5px;
+  }
+  .attendance-button,
+  .print-button {
+    font-size: 12px;
+    width: 75px;
+  }
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    font-size: 10px !important;
+  }
+  .total-hours-container {
+    font-size: 10px;
   }
 }
