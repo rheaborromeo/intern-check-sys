@@ -28,7 +28,7 @@ const InternDetail = () => {
 
     const fetchTimesheets = async () => {
       try {
-        const response = await getRequest(`timesheets/get_approved_student_timesheets?intern_id=${id}&token=${token}`);
+        const response = await getRequest(`timesheets/get_approved_interns_timesheets?intern_id=${id}&token=${token}`);
         setTimesheets(Array.isArray(response?.data) ? response.data : []);
       } catch (error) {
         console.error("Timesheet fetch error:", error);

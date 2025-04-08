@@ -1,51 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Table, Spin } from "antd";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
-import "../styles/AttendanceTable.css";
-
+import "../styles/ApprovedPrint.css";
 import { getRequest } from "../utils/apicalls";
 
-const ApprovedPrint = ({ handlePrint }) => {
+const ApprovedPrint = ({ internId }) => {
+  const [intern, setIntern] = useState(null);
   const [approvedRecords, setApprovedRecords] = useState([]);
-  const [loading, setLoading] = useState(false); // Define setLoading here
+  const [loading, setLoading] = useState(false);
+
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    console.log("Component mounted. Fetching approved records...");
-fetchApprovedRecords();
+    fetchApprovedRecords();
   }, []);
 
   const fetchApprovedRecords = async () => {
     setLoading(true);
-    
-    const requester = localStorage.getItem("requester");
-    const token = localStorage.getItem("authToken");
-  
-    if (!requester || !token) {
-      console.error("Missing token or requester.");
-      setLoading(false);
-      return;
-    }
-  
     try {
       const response = await getRequest(
-        'timesheets/get_approved_student_timesheets',
-        { requester, token }
+        `timesheets/get_approved_interns_timesheets?intern_id=${internId}&token=${token}`
       );
-  
-      if (response?.status === "success" && Array.isArray(response?.data)) {
-        setApprovedRecords(response.data);
-      } else {
-        setApprovedRecords([]);
+      if (response?.data) {
+        setIntern({
+          name: response.data.name,
+          school: response.data.school,
+        });
+        setApprovedRecords(
+          Array.isArray(response.data.timesheets) ? response.data.timesheets : []
+        );
       }
     } catch (error) {
       console.error("Error fetching approved records:", error);
-      setApprovedRecords([]);
     } finally {
       setLoading(false);
     }
   };
-   
-
 
   const convertTo12HourFormat = (time) => {
     if (!time) return "-";
@@ -61,7 +51,7 @@ fetchApprovedRecords();
       (sum, record) => sum + (parseFloat(record.total_hours) || 0),
       0
     );
-    return totalHours.toFixed(2); // Rounded to 2 decimal places
+    return totalHours.toFixed(2);
   };
 
   const approvedColumns = [
@@ -75,20 +65,15 @@ fetchApprovedRecords();
           month: "long",
           day: "numeric",
         }),
-      width: 150,
     },
     {
-      title: "Setup (FTF/Remote)",
+      title: "Setup",
       key: "setup",
       render: (record) => {
-        const amModality =
-          record.am_modality !== "Absent" ? record.am_modality : "";
-        const pmModality =
-          record.pm_modality !== "Absent" ? record.pm_modality : "";
-
-        return [amModality, pmModality].filter(Boolean).join(" / ") || "-";
+        const am = record.am_modality !== "Absent" ? record.am_modality : "";
+        const pm = record.pm_modality !== "Absent" ? record.pm_modality : "";
+        return [am, pm].filter(Boolean).join(" / ") || "-";
       },
-      width: 150,
     },
     {
       title: "Morning",
@@ -98,14 +83,12 @@ fetchApprovedRecords();
           dataIndex: "time_in_am",
           key: "time_in_am",
           render: convertTo12HourFormat,
-          width: 100,
         },
         {
           title: "End",
           dataIndex: "time_out_am",
           key: "time_out_am",
           render: convertTo12HourFormat,
-          width: 100,
         },
       ],
     },
@@ -117,14 +100,12 @@ fetchApprovedRecords();
           dataIndex: "time_in_pm",
           key: "time_in_pm",
           render: convertTo12HourFormat,
-          width: 100,
         },
         {
           title: "End",
           dataIndex: "time_out_pm",
           key: "time_out_pm",
           render: convertTo12HourFormat,
-          width: 100,
         },
       ],
     },
@@ -132,13 +113,17 @@ fetchApprovedRecords();
       title: "# of hours",
       dataIndex: "total_hours",
       key: "total_hours",
-      width: 100,
     },
     {
       title: "Approved by",
       key: "approved_by",
       render: (record) => {
-        const approvedBy = record.approved_by_name || "";
+        const approvedByParts = record.approved_by?.trim().split(" ") || [];
+        const lastName =
+          approvedByParts.length > 0
+            ? approvedByParts[approvedByParts.length - 1]
+            : "-";
+    
         const approvedOn = record.approved_on
           ? new Date(record.approved_on).toLocaleDateString("en-US", {
               year: "numeric",
@@ -146,47 +131,67 @@ fetchApprovedRecords();
               day: "numeric",
             })
           : "";
-        return `${approvedBy}  ${approvedOn}`;
+    
+        return `${lastName} (${approvedOn})`;
       },
-      width: 200,
-    },
+    }
+    
   ];
 
   return (
-    <div className="attendance-content">
-    <div className="approved-attendance-content">
-      <div className="approved-header-container">
-        <img src={mytLogo} alt="MYT Logo" className="myt-logo" />
-        <div className="approved-header-text">
-          <h2 className="approved-company-name">MYT SoftDev Solutions, Inc.</h2>
-          <p className="approved-company-address">
-            301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu
-          </p>
+    <div className="dtr-container">
+      <div className="dtr-paper">
+        <div className="dtr-header">
+          <img src={mytLogo} alt="MYT Logo" className="dtr-logo" />
+          <div className="dtr-header-text">
+            <h2 className="dtr-company-name">MYT SoftDev Solutions, Inc.</h2>
+            <p className="dtr-company-address">
+              301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu
+            </p>
+          </div>
         </div>
-      </div>
 
-      <h2 className="approved-attendance-title">Daily Time Record</h2>
+        <h3 className="dtr-title">DAILY TIME RECORD</h3>
 
-      <div id="printable-area">
+        <div className="dtr-info-table">
+          <div className="dtr-info-cell">
+            <strong>Name of Student:</strong>
+            <div className="dtr-info-value">{intern?.name || ""}</div>
+          </div>
+          <div className="dtr-info-cell">
+            <strong>Organization:</strong>
+            <div className="dtr-info-value">{intern?.school || ""}</div>
+          </div>
+          <div className="dtr-info-cell">
+            <strong>Name of Supervisor:</strong>
+            <div className="dtr-info-value"></div>
+          </div>
+          <div className="dtr-info-cell">
+            <strong>Designation:</strong>
+            <div className="dtr-info-value">Intern</div>
+          </div>
+        </div>
+
         <Spin spinning={loading} size="large">
-          <Table
-            dataSource={approvedRecords.map((item, index) => ({
-              ...item,
-              key: index,
-            }))}
-            columns={approvedColumns}
-            pagination={false}
-            className="attendance-table"
-            
-            tableLayout="fixed"
-          />
-
-          <div className="total-hours-container">
-            <h3>Total Approved Hours: {getTotalApprovedHours()} hrs.</h3>
+          <div className="table-wrapper">
+            <Table
+              dataSource={approvedRecords.map((item, index) => ({
+                ...item,
+                key: index,
+              }))}
+              columns={approvedColumns}
+              pagination={false}
+              className="dtr-record-table"
+              tableLayout="auto"
+              scroll={{ x: true }}
+            />
           </div>
         </Spin>
+
+        <div className="total-hours-container">
+          <h3>Total Approved Hours: {getTotalApprovedHours()} hrs.</h3>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

@@ -14,10 +14,11 @@ const PrintAttendanceTable = () => {
           <style>
             body {
               font-family: 'Times New Roman', serif;
+              background-color:rgb(255, 0, 0);
               padding: 40px;
             }
             h1 {
-              text-align: center;
+              text-align: flex-start;
             }
             p {
               text-align: justify;

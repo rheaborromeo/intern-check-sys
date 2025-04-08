@@ -3,7 +3,7 @@ import React from "react";
 const BookPrintView = () => {
   return (
     <div className="p-10 font-serif">
-      <h1 className="text-center text-3xl font-bold">Book Title</h1>
+      <h1 style={{color: "green"}} className="text-center text-3xl font-bold">Book Title</h1>
       <p className="text-justify mt-5">
         This is a beautifully formatted page meant for printing in a book-style layout.
         You can add headers, page numbers, chapter titles, etc., here.
