@@ -1,12 +1,10 @@
-//optimized
 import React, { useState, useEffect } from "react";
 import { postRequest } from "../utils/apicalls";
 import { Button, message } from "antd";
 import { ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "../styles/MarkAttendance.css";
+import "../styles/MarkAttendance.css"; // This contains the regular styles
+import timelog from "../image/Time management.png";
 
 const MarkAttendance = () => {
   const navigate = useNavigate();
@@ -58,15 +56,19 @@ const MarkAttendance = () => {
       if (response.status === "failed") {
         message.error(response.message, {
           position: "top-center",
-          autoClose: 2000,
+          autoClose: 3000,
         });
+        // Ensure message closes after the duration
+        setTimeout(() => {
+          message.destroy();
+        }, 3000);
         return;
       }
-
       message.success(response.message, {
         position: "top-center",
         autoClose: 3000,
       });
+
       if (!isTimedIn) {
         setIsTimedIn(true);
         localStorage.setItem(`isTimedIn_${session}`, "true");
@@ -74,10 +76,20 @@ const MarkAttendance = () => {
         setIsTimedOut(true);
         localStorage.setItem(`isTimedOut_${session}`, "true");
       }
-      setTimeout(() => navigate("/dashboard"), 2000);
+      // Redirect after message duration
+      setTimeout(() => {
+        message.destroy();
+        navigate("/dashboard");
+      }, 3000); // Align redirection time with message duration
     } catch (error) {
-      console.log(error);
-      message.error("An error occurred. Please try again.");
+      message.error("An error occurred. Please try again.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      // Ensure message closes after the duration
+      setTimeout(() => {
+        message.destroy();
+      }, 3000);
     }
   };
 
@@ -89,19 +101,19 @@ const MarkAttendance = () => {
     (session === "afternoon" && isTimedOut);
 
   return (
-    <div className="overlay-container">
-      <ToastContainer />
-      <div className="box-container">
+    <div className="log-overlay-container">
+      <div className="log-box-container">
+        <img src={timelog} alt="logo" className="log-attendance-image" />
+
         <Button
           type="text"
           icon={<CloseOutlined />}
           onClick={() => navigate(-1)}
           className="close-button"
         />
-
         <div className="clock-display">
           <ClockCircleOutlined style={{ marginRight: 8, fontSize: "1.6em" }} />
-          <strong className="current-time">{currentFormattedTime}</strong>
+          <strong className="log-current-time">{currentFormattedTime}</strong>
         </div>
 
         <div className="time-section">

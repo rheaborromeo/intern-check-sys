@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu, message } from "antd";
-import { ClockCircleOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import {
+  ClockCircleOutlined,
+  LogoutOutlined,
+  MenuOutlined,
+} from "@ant-design/icons";
+import { useNavigate, useLocation } from "react-router-dom";
 import { postRequest } from "../utils/apicalls";
 import internCheckLogo from "../image/inchck_logo.png";
-import { useLocation } from "react-router-dom";
-import "../styles/Sidebar.css";
-import "react-toastify/dist/ReactToastify.css";
 
 const { Sider } = Layout;
 
 const Sidebar = ({ collapsed, onCollapse }) => {
   const navigate = useNavigate();
-  const [selectedKey, setSelectedKey] = useState("1");
   const location = useLocation();
-  const [isLoggingOut, setIsLoggingOut] = useState(false); // Prevent multiple logout requests
+
+  const [selectedKey, setSelectedKey] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleLogout = async () => {
-    if (isLoggingOut) return; // Prevent multiple logout requests
+    if (isLoggingOut) return;
     setIsLoggingOut(true);
 
-    console.log("Logout button clicked!");
-
     const email = localStorage.getItem("email");
-    const id = localStorage.getItem("internId");
     const token = localStorage.getItem("authToken");
+    const requester = localStorage.getItem("requester");
 
-    if (!id || !token || !email) {
+    if (!requester || !token || !email) {
       localStorage.clear();
       sessionStorage.clear();
       navigate("/");
@@ -34,61 +35,48 @@ const Sidebar = ({ collapsed, onCollapse }) => {
       return;
     }
 
-    console.log("Retrieved from localStorage:", { email, requester:id, token });
-
-    const payload = { requester: id, token, email};
-
-    console.log("Sending logout request with payload:", payload);
+    const payload = { requester, token, email };
 
     try {
       const response = await postRequest("interns/logout", payload);
 
       if (response?.message === "Intern logged out successfully.") {
-        message.success("Logout successful! Redirecting to login...", 3);
+        message.success(response.message);
         localStorage.clear();
-        sessionStorage.clear();
         navigate("/");
       } else {
-        message.error(response?.message || "Logout failed.", 3);
+        message.error(response?.message);
       }
     } catch (error) {
-      console.error("Logout error:", error);
-      message.error("An error occurred while logging out.", 3);
+      message.error("An error occurred while logging out.");
     } finally {
-      setIsLoggingOut(false); // Reset logout state
+      setIsLoggingOut(false);
     }
   };
-
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     // Clear all data from localStorage when the page is about to be unloaded (window/tab closed)
-  //     localStorage.clear();
-  //   };
-  
-  //   // Attach the event listener to the window
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-  
-  //   // Cleanup: remove the event listener when the component is unmounted
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);  
 
   useEffect(() => {
     if (location.pathname.includes("attendance")) {
       setSelectedKey("1");
-    } else if (location.pathname.includes("interns")) {
-      setSelectedKey("2");
-    } else if (location.pathname.includes("login")) {
+    } else {
       setSelectedKey("");
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleMenuClick = (e) => {
     if (e.key === "2") {
-      handleLogout(); // Logout only triggered from here
-    } else {
-      setSelectedKey(e.key);
+      handleLogout();
+    } else if (e.key === "1") {
       navigate("/dashboard");
     }
   };
@@ -98,13 +86,42 @@ const Sidebar = ({ collapsed, onCollapse }) => {
   };
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} className="fixed-sidebar">
-      <div className="logo" onClick={handleTitleClick} style={{ cursor: "pointer", textAlign: "center" }}>
-        <img src={internCheckLogo} alt="Intern Check" className="web-logo" />
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={onCollapse}
+      className="fixed-sidebar"
+      width={200}
+      breakpoint="lg"
+      collapsedWidth={isMobile ? 0 : 80}
+    >
+      <div className="logo" onClick={handleTitleClick}>
+        {!isMobile && collapsed ? (
+          <MenuOutlined className="text-white text-2xl" />
+        ) : (
+          <img
+            src={internCheckLogo}
+            alt="Intern Check"
+            className="web-logo transition-all duration-300 w-[90px] h-[90px]"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://via.placeholder.com/90"; // fallback image
+            }}
+          />
+        )}
       </div>
-      <Menu theme="dark" mode="vertical" selectedKeys={[selectedKey]} onClick={handleMenuClick}>
-        <Menu.Item key="1" icon={<ClockCircleOutlined />}> Attendance </Menu.Item>
-        <Menu.Item key="2" className="logout-btn" icon={<LogoutOutlined />} disabled={isLoggingOut}>
+
+      <Menu
+        theme="dark"
+        mode="vertical"
+        selectedKeys={[selectedKey]}
+        onClick={handleMenuClick}
+        className="custom-menu"
+      >
+        <Menu.Item key="1" icon={<ClockCircleOutlined />}>
+          Attendance
+        </Menu.Item>
+        <Menu.Item key="2" icon={<LogoutOutlined />} disabled={isLoggingOut}>
           Logout
         </Menu.Item>
       </Menu>

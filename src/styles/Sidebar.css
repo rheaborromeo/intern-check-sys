@@ -1,115 +1,117 @@
+/* Base styles */
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* Prevents unnecessary scroll */
+  @apply h-full m-0 p-0 overflow-hidden;
 }
 
 .fixed-sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh !important; /* Force full viewport height */
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
-  width: 250px; /* Default width for larger screens */
+  @apply fixed top-0 left-0 z-[1000] flex flex-col transform-gpu transition-transform transition-width duration-300 ease-in-out h-screen;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
-.logo {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  background: #001529;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 0 15px;
-  transition: all 0.3s ease-in-out;
+/* Collapsed sidebar */
+.fixed-sidebar.collapsed {
+  @apply -translate-x-full w-[80px];
 }
 
-.fixed-sidebar .ant-menu {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  transition: background-color 0.3s ease-in-out; /* Smooth transition */
+/* Sidebar content opacity fade */
+.fixed-sidebar-content {
+  @apply transition-opacity duration-300 ease-in-out;
 }
 
-.ant-menu-item-selected {
-  background-color: rgba(24, 144, 255, 0.5) !important; /* Adjust opacity for smooth transition */
-  transition: background-color 0.3s ease-in-out; /* Ensure transition applies */
+.fixed-sidebar.collapsed .fixed-sidebar-content {
+  @apply opacity-0;
 }
 
-.fixed-sidebar .ant-menu:last-child {
-  margin-top: auto;
+/* Menu items with hover effect */
+.custom-menu .ant-menu-item {
+  transition: background-color 0.3s ease;
 }
 
-/* Logo default size */
-.web-logo {
-  height: 90px;
-  width: 95px;
-  transition: all 0.3s ease-in-out;
-  justify-content: center;
-  margin-left: -10px;
+.custom-menu .ant-menu-item:hover {
+  background-color: #0099ff !important;
+  color: #fff !important;
 }
 
-/* Enlarge logo when sidebar is collapsed */
-.fixed-sidebar.collapsed .web-logo {
-  height: 84px; /* Reduced size when collapsed */
+/* Responsive widths */
+.fixed-sidebar {
+  @apply w-[10px]; /* base mobile width */
 }
 
-/* Media queries for different screen sizes */
-
-/* For screens larger than 1024px */
-@media (max-width: 1024px) {
+@media (min-width: 480px) {
   .fixed-sidebar {
-    width: 220px; /* Reduce width for medium screens */
-  }
-}
-
-/* For screens between 768px and 1024px (tablets) */
-@media (max-width: 1024px) and (min-width: 768px) {
-  .fixed-sidebar {
-    width: 180px; /* Further reduce width for tablet screens */
+    @apply w-[180px];
   }
 
   .logo {
-    height: 50px; /* Reduce logo size */
-    font-size: 16px; /* Reduce text size */
+    @apply h-[45px] text-[14px] px-[10px];
   }
 
   .web-logo {
-    height: 60px; /* Further reduce logo size */
-    width: 60px;
-  }
-}
-
-/* For screens smaller than 768px (mobile devices) */
-@media (max-width: 768px) {
-  .fixed-sidebar {
-    width: 160px; /* Much smaller width for mobile devices */
-  }
-  
-  .logo {
-    height: 45px; /* Further reduce logo height */
-    font-size: 14px; /* Further reduce font size */
-    padding: 0 10px; /* Adjust padding */
-  }
-
-  .web-logo {
-    height: 50px; /* Smaller logo for mobile */
-    width: 50px;
+    @apply h-[50px] w-[50px];
   }
 
   .ant-menu-item {
-    font-size: 14px; /* Smaller text in the menu */
+    @apply text-[14px];
   }
 
   .fixed-sidebar.collapsed .web-logo {
-    height: 50px; /* Reduced size when collapsed on mobile */
+    @apply h-[50px];
   }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .fixed-sidebar {
+    @apply w-[180px];
+  }
+
+  .logo {
+    @apply h-[50px] text-[16px];
+  }
+
+  .web-logo {
+    @apply h-[60px] w-[60px];
+  }
+}
+
+@media (min-width: 1024px) {
+  .fixed-sidebar {
+    @apply w-[250px];
+  }
+
+  .logo {
+    @apply h-[64px] text-[18px];
+  }
+
+  .web-logo {
+    @apply h-[90px] w-[95px];
+  }
+}
+
+/* Logo styling */
+.logo {
+  @apply h-[64px] flex items-center justify-center text-white text-[18px] font-bold bg-[#001529] my-[10px] px-[15px] transition-all duration-300 ease-in-out;
+}
+
+/* Ant menu layout in sidebar */
+.fixed-sidebar .ant-menu {
+  @apply flex flex-col flex-1 transition-colors duration-300 ease-in-out;
+}
+
+.fixed-sidebar .ant-menu:last-child {
+  @apply mt-auto;
+}
+
+/* Menu selected item style */
+.ant-menu-item-selected {
+  background-color: rgba(24, 144, 255, 0.5) !important;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Web logo image or icon */
+.web-logo {
+  @apply h-[90px] w-[95px] ml-[-10px] flex justify-center transition-all duration-300 ease-in-out;
+}
+
+.fixed-sidebar.collapsed .web-logo {
+  @apply h-[84px];
 }

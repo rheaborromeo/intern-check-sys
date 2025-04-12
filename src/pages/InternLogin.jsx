@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { postRequest } from "../utils/apicalls";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from "../image/logo_.png";
-import "../styles/internlogin.css"; // Import the custom CSS
+import "../styles/internlogin.css"; // Import the separate TailwindCSS file
 
 const InternLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -40,14 +38,14 @@ const InternLogin = () => {
       const response = await postRequest("interns/login", payload);
 
       if (response.success) {
-        message.success("Login successful!");
+        message.success(response.message);
         localStorage.setItem("email", email);
 
         setTimeout(() => {
           navigate("/otp_verification", { state: { email } });
         }, 3000);
       } else {
-        message.error(response.message || "Login failed. Please try again.");
+        message.error(response.message);
       }
     } catch (error) {
       message.error("Login failed! Please try again.");
@@ -60,7 +58,6 @@ const InternLogin = () => {
     <div className="intern-login-container">
       <div className="intern-form-container">
         <img src={logo} alt="Logo" className="login-logo" />
-        <ToastContainer />
         <Form
           name="login-form"
           onFinish={onFinish}

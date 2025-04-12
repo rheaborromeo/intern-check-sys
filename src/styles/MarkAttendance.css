@@ -1,205 +1,80 @@
-/* Centers the overlay on the screen */
-.overlay-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 20px; /* Ensures spacing on smaller screens */
+.log-overlay-container {
+  @apply flex justify-center items-center min-h-screen p-5;
 }
 
-/* The main box styling (Bigger Size) */
-.box-container {
-  position: relative;
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 420px; /* Bigger Width */
-  max-width: 90%; /* Ensures responsiveness */
-  height: 340px; /* Bigger Height */
-  max-height: 90vh; /* Prevents overflow */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Align elements to the top */
-  align-items: center;
-  gap: 20px; /* Adds spacing between elements */
-  padding-top: 25px; /* Extra padding at the top */
-  font-family: 'Roboto', sans-serif; /* Clean and modern font for the box */
-  
+.log-box-container {
+  @apply flex flex-col items-center justify-start bg-white p-10 rounded-lg shadow-xl text-center w-full max-w-screen-2xl h-auto;
 }
 
-/* Adjust margin of the first element */
-.clock-display {
-  margin-top: 45px; /* Ensures it's not too close to the top */
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px; /* Creates separation from other elements */
-  font-weight: 600; /* Slightly bolder to emphasize the time */
-}
-
-/* Buttons should be stacked vertically and centered */
-.time-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Ensures buttons stay centered */
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-/* Prevents buttons from stretching while keeping them uniform */
-.time-buttons button {
-  width: auto;
-  min-width: 280px;
-  min-height: 40px;
-  padding: 10px 16px;
-  font-size: 16px;
-  font-weight: 600; /* Consistent button weight */
-  letter-spacing: 0.5px; /* Adds a slight space between letters */
-  transition: all 0.3s ease-in-out; /* Smooth transition on hover */
-}
-
-.work-mode-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center; /* Ensures buttons stay centered */
-  border-radius: 10px;
-  
- 
-}
-
-.work-mode-btn button {
-  width: auto;
-  min-width: 280px;
-  min-height: 40px;
-  padding: 10px 16px;
-  font-size: 16px;
-  font-weight: 600; /* Consistent button weight */
-  letter-spacing: 0.5px; /* Adds a slight space between letters */
-  transition: all 0.3s ease-in-out; /* Smooth transition on hover */
-}
-
-.work-mode-text {
+.log-attendance-image {
+  width: 318px;
+  height: auto;
   display: block;
-  font-weight: normal;
-  margin-bottom: 26px; /* Adds space between session header and buttons */
-  font-size: 19px;
-  font-family: 'Roboto', sans-serif;
-  letter-spacing: 0.8px; /* Adds spacing between letters for clarity */
-  text-transform: capitalize; /* Capitalizes the first letter of the session */
-  color: #333; /* Dark color for better readability */
+  margin-left: auto;
+  margin-right: auto;
 }
 
-
-/* Close button positioned on top right */
 .close-button {
-  color: #929292;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 18px;
-  cursor: pointer;
+  @apply absolute top-2 right-2 text-gray-500;
 }
 
-/* Styling for session header */
+.clock-display {
+  @apply flex justify-center items-center mt-3 mb-4 text-xl font-semibold;
+  margin-top: 0;
+}
+
 .session-class {
-  display: block;
-  font-weight: normal;
-  margin-bottom: 36px; /* Adds space between session header and buttons */
-  font-size: 19px;
-  font-family: 'Roboto', sans-serif;
-  letter-spacing: 0.8px; /* Adds spacing between letters for clarity */
-  text-transform: capitalize; /* Capitalizes the first letter of the session */
-  color: #333; /* Dark color for better readability */
+  @apply mb-6 text-lg text-gray-700 font-medium capitalize;
 }
 
-/* Styling for current time */
-.current-time {
-  letter-spacing: 1px; /* Adds space between characters */
-  font-weight: 700; /* Bold the time */
-  color: #333; /* Dark color for time text */
+.time-buttons {
+  @apply flex flex-col items-center gap-5;
 }
 
-/* RESPONSIVENESS */
+@media (max-width: 1024px) {
+  .log-box-container {
+    @apply w-[100%] max-w-[900px] p-8;
+    height: auto;
+  }
+  .log-attendance-image {
+    width: 40%;
+  }
+}
 
-/* Medium Screens (Tablets, Smaller Laptops) */
 @media (max-width: 768px) {
-  .box-container {
-    width: 90%; /* Uses more screen space */
-    max-width: 600px; /* Scales down slightly */
-    height: 330px; /* Adjust height slightly */
-    padding: 18px;
+  .log-box-container {
+    @apply w-[100%] max-w-[900px] p-8;
+    height: auto;
   }
-
-  .clock-display {
-    margin-top: 20px; /* Moves the clock up */
+  .log-attendance-image {
+    width: 60%;
   }
-
-  .time-buttons button {
-    min-width: 140px;
-    font-size: 15px;
-    padding: 9px 14px;
-  }
-
-  .work-mode-btn button {
-    min-width: 140px;
-    font-size: 15px;
-    padding: 9px 14px;
-  }
-  
 }
 
-/* Small Screens (Phones, Small Tablets) */
 @media (max-width: 480px) {
-  .box-container {
-    width: 95%; /* Uses more screen space */
-    max-width: 420px; /* Prevents it from becoming too wide */
-    height: 230px; /* Adjusted height */
-    padding: 15px;
+  .log-box-container {
+    @apply w-[100%] max-w-[400px] p-6;
   }
-
-  .clock-display {
-    margin-top: 10px; /* Moves the clock even higher on smaller screens */
-  }
-
-  .time-buttons button {
-    min-width: 130px;
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-
-  .work-mode-btn button {
-    min-width: 130px;
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-
-  .session-class {
-    font-size: 14px; /* Slightly larger font for better readability */
+  .log-attendance-image {
+    width: 70%;
   }
 }
 
-/* Extra Small Screens (Very Small Phones) */
 @media (max-width: 360px) {
-  .box-container {
-    width: 100%;
-    max-width: 350px;
-    height: 230px; /* Maintains usability */
-    padding: 12px;
+  .log-box-container {
+    @apply w-[100%] max-w-[500px] p-4;
   }
-
-  .time-buttons button {
-    min-width: 120px;
-    font-size: 13px;
-    padding: 7px 10px;
+  .log-attendance-image {
+    width: 70%;
   }
+}
 
-  .work-mode-btn button {
-    min-width: 120px;
-    font-size: 13px;
-    padding: 7px 10px;
-  } 
+.time-buttons {
+  margin-top: 10px;
+}
+
+.time-buttons button {
+  height: 3rem;
+  width: 10rem;
+  font-size: 1rem;
 }

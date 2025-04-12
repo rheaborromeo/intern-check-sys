@@ -6,7 +6,10 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        '18': '4.5rem', // This defines the `h-18` class
+        '18': '4.5rem', 
+      },
+      transitionProperty: {
+        'width': 'width',
       },
 
     },

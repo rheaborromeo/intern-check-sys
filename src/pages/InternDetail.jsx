@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import { CloseOutlined } from '@ant-design/icons'; // Import the close icon from Ant Design
+import { CloseOutlined } from "@ant-design/icons"; // Import the close icon from Ant Design
 import { getRequest } from "../utils/apicalls";
 import "../styles/InternDetail.css";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
@@ -28,7 +28,9 @@ const InternDetail = () => {
 
     const fetchTimesheets = async () => {
       try {
-        const response = await getRequest(`timesheets/get_approved_interns_timesheets?intern_id=${id}&token=${token}`);
+        const response = await getRequest(
+          `timesheets/get_approved_interns_timesheets?intern_id=${id}&token=${token}`
+        );
         setTimesheets(Array.isArray(response?.data) ? response.data : []);
       } catch (error) {
         console.error("Timesheet fetch error:", error);
@@ -43,32 +45,37 @@ const InternDetail = () => {
 
   // Function to navigate back to the /interns page when Close Icon is clicked
   const goBack = () => {
-    navigate("/interns"); // Go back to the /interns page
+    navigate("/interns");
   };
 
   return (
     <div className="dtr-container">
       <div className="dtr-paper">
-        {/* Close Icon in the upper-right corner */}
         <div className="close-icon-container">
-          <CloseOutlined onClick={goBack} style={{ fontSize: '20px', cursor: 'pointer' }} />
+          <CloseOutlined
+            onClick={goBack}
+            style={{ fontSize: "20px", cursor: "pointer" }}
+          />
         </div>
-
         <div className="dtr-header">
           <img src={mytLogo} alt="Logo" className="dtr-logo" />
           <div className="dtr-header-text">
             <h2 className="dtr-company-name">MYT SoftDev Solutions, Inc.</h2>
-            <p className="dtr-company-address">301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu</p>
+            <p className="dtr-company-address">
+              301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu
+            </p>
           </div>
         </div>
-
         <h3 className="dtr-title">DAILY TIME RECORD</h3>
-
         <div className="dtr-info-table">
           <div className="dtr-info-cell">
             <strong>Name of Student:</strong>
             <div className="dtr-info-value">
-              {intern ? `${intern.first_name} ${intern.middle_name?.[0] || ""} ${intern.last_name}${intern.suffix ? ", " + intern.suffix : ""}` : ""}
+              {intern
+                ? `${intern.first_name} ${intern.middle_name?.[0] || ""} ${
+                    intern.last_name
+                  }${intern.suffix ? ", " + intern.suffix : ""}`
+                : ""}
             </div>
           </div>
           <div className="dtr-info-cell">
@@ -88,8 +95,14 @@ const InternDetail = () => {
         <table className="dtr-record-table">
           <thead>
             <tr>
-              <th className="dtr-date-col" rowSpan="2">Date</th>
-              <th rowSpan="2">Set Up<br />(F2F/Remote)</th>
+              <th className="dtr-date-col" rowSpan="2">
+                Date
+              </th>
+              <th rowSpan="2">
+                Set Up
+                <br />
+                (F2F/Remote)
+              </th>
               <th colSpan="2">Morning</th>
               <th colSpan="2">Afternoon</th>
               <th rowSpan="2"># of Hours</th>
@@ -104,7 +117,11 @@ const InternDetail = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="8" style={{ textAlign: "center" }}>Loading...</td></tr>
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center" }}>
+                  Loading...
+                </td>
+              </tr>
             ) : timesheets.length > 0 ? (
               timesheets.map((ts, index) => (
                 <tr key={index}>
@@ -119,7 +136,11 @@ const InternDetail = () => {
                 </tr>
               ))
             ) : (
-              <tr><td colSpan="8" style={{ textAlign: "center" }}>No Approved Records</td></tr>
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center" }}>
+                  No Approved Records
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

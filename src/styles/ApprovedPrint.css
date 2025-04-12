@@ -1,75 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Layout container */
 .dtr-container {
-    @apply px-2 sm:px-4 md:px-6 lg:px-8 bg-gray-50;
+  @apply flex justify-center items-start p-4 w-full overflow-x-auto;
+}
+
+.dtr-paper {
+  @apply bg-white p-6 rounded-none shadow-md w-full max-w-[1100px];  /* Default settings */
+}
+
+/* Header section */
+.dtr-header {
+  @apply flex items-center;
+}
+
+.dtr-logo {
+  width: 10vw !important;  /* or any px value */
+  height: auto !important;
+}
+
+.dtr-header-text {
+  @apply flex flex-col;
+}
+
+.dtr-company-name {
+  @apply text-3xl font-bold; /* increased from text-2xl */
+}
+
+.dtr-company-address {
+  @apply text-lg text-gray-700 leading-snug; /* increased from text-base */
+}
+
+.dtr-title {
+  @apply text-center text-2xl font-semibold mb-6 mt-4;
+}
+
+/* Info table */
+.dtr-info-table {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6;
+}
+
+.dtr-info-cell {
+  @apply flex flex-col;
+}
+
+.dtr-info-value {
+  @apply px-2 py-2 mt-1;
+}
+
+/* Table wrapper to prevent overflow */
+.table-wrapper {
+  @apply overflow-x-hidden overflow-y-hidden;
+}
+
+/* Total hours */
+.total-hours-container {
+  @apply mt-6 text-right font-semibold text-xl;
+}
+
+/* Table body background color */
+.dtr-record-table .ant-table-tbody > tr > td {
+  @apply bg-white;
+}
+
+/* Remove all border-radius for the Ant Design table */
+.dtr-record-table .ant-table,
+.dtr-record-table .ant-table-wrapper,
+.dtr-record-table .ant-table-thead,
+.dtr-record-table .ant-table-tbody,
+.dtr-record-table .ant-table-tbody > tr > td,
+.dtr-record-table .ant-table-tbody > tr > th,
+.dtr-record-table .ant-table-bordered {
+  border-radius: 0 !important; /* Force removal of border-radius */
+}
+
+.dtr-record-table .ant-table td,
+.dtr-record-table .ant-table th {
+  border-radius: 0 !important; /* Ensure cells do not have rounded corners */
+}
+
+/* Remove any border-radius applied by default */
+.dtr-record-table .ant-table-cell {
+  border-radius: 0 !important;
+}
+
+/* Media Queries */
+
+/* For tablets and below (screen widths ≤ 768px) */
+@media (max-width: 768px) {
+  .dtr-container {
+    @apply p-2;  /* Reduce padding for smaller screens */
+    width: 100%;  /* Ensure the container takes the full width */
   }
-  
+
   .dtr-paper {
-    @apply w-full max-w-6xl mx-auto bg-white p-4 sm:p-6 md:p-8 border border-gray-300 rounded-lg shadow-md;
+    @apply px-4 py-4;  /* Adjust paper padding for small screens */
+    max-width: 90%;  /* Reduce the maximum width for smaller screens */
   }
-  
-  .dtr-header {
-    @apply flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4;
-  }
-  
+
   .dtr-logo {
-    @apply w-[70px] h-auto;
+    width: 30vw !important;  /* Reduce logo size */
   }
-  
+
   .dtr-header-text {
-    @apply flex-1;
+    text-align: center; /* Center header text */
   }
-  
+
   .dtr-company-name {
-    @apply text-xl font-semibold m-0;
+    font-size: 1.8rem;  /* Decrease font size */
   }
-  
+
   .dtr-company-address {
-    @apply text-sm text-gray-600 m-0;
+    font-size: 1rem;  /* Decrease font size */
   }
-  
-  .dtr-title {
-    @apply text-center mt-2 mb-4 font-semibold text-lg;
-  }
-  
-  /* ⬇️ Reduced spacing and font size */
+
   .dtr-info-table {
-    @apply flex flex-wrap gap-2 md:gap-4 mb-4;
+    grid-template-columns: 1fr; /* Stack info table cells */
   }
-  
-  .dtr-info-cell {
-    @apply flex-1 min-w-full sm:min-w-[45%] text-sm leading-tight;
-  }
-  
-  .dtr-info-value {
-    @apply mt-0.5 p-1 rounded bg-transparent text-sm;
-  }
-  
+
   .total-hours-container {
-    @apply mt-4 text-right font-semibold text-lg px-4;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    margin-top: -5px;
+    text-align: left; /* Align total hours to the left */
   }
-  
-  /* ✅ Table grows naturally without fixed height */
-  .table-wrapper {
-    @apply w-full overflow-x-auto border border-gray-300 rounded-md;
+}
+
+/* For mobile and below (screen widths ≤ 480px) */
+@media (max-width: 480px) {
+  .dtr-container {
+    @apply p-2;  /* Reduce padding further */
+    width: 100%;  /* Full width on mobile */
   }
-  
-  /* ✅ Table styling */
-  .dtr-record-table .ant-table {
-    border: 1px solid #d1d5db;
+
+  .dtr-paper {
+    @apply px-2 py-2;  /* Further reduce padding */
+    max-width: 95%;  /* Allow the paper to be more flexible */
   }
-  
-  .dtr-record-table .ant-table-thead > tr > th,
-  .dtr-record-table .ant-table-tbody > tr > td {
-    border: 1px solid #d1d5db;
-    white-space: nowrap;
+
+  .dtr-logo {
+    width: 40vw !important;  /* Further reduce logo size */
   }
-  
-  .dtr-record-table .ant-table-cell::before,
-  .dtr-record-table .ant-table-cell::after {
-    content: none !important;
-    display: none !important;
+
+  .dtr-company-name {
+    font-size: 1.5rem;  /* Further decrease font size */
   }
-  
+
+  .dtr-company-address {
+    font-size: 0.875rem;  /* Further decrease font size */
+  }
+
+  .dtr-title {
+    font-size: 1.5rem;  /* Decrease title font size */
+  }
+
+  .dtr-info-table {
+    grid-template-columns: 1fr; /* Stack info table cells */
+  }
+
+  .total-hours-container {
+    font-size: 1rem;  /* Smaller font for total hours */
+  }
+}

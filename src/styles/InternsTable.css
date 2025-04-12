@@ -1,279 +1,146 @@
-.list-attendance-container {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  margin-left: 10px;
-  padding: 0;
-  background-color: white !important;
+.list-record-container {
+  @apply w-screen flex justify-end min-h-screen overflow-y-auto overflow-x-hidden;
 }
 
-.list-attendance-content {
-  flex-grow: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: margin-left 0.3s ease; /* Add smooth transition for when the sidebar is toggled */
+.list-record-container.expanded .list-dashboard-content,
+.list-record-container.collapsed .list-dashboard-content {
+  @apply ml-[6vw];
 }
-
-.list-table-wrapper {
-  max-width: 100%; /* Ensure full width */
-  margin-left: 0; /* Default margin */
-  overflow-x: auto; /* Enables horizontal scrolling */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
-  padding-left: 10px; /* Ensure left side isn't clipped */
-}
-
-.list-attendance-title {
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 15px;
-  margin-top: 21px;
-  text-align: center;
-}
-
-/* .sub-text-class {
-  text-align: center;
-  color: #111111;
-  margin-top: -11px;
-  font-weight: 300px;
-  font-size: 16px;
-} */
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-  margin-right: 20px !important;
-}
-
-.list-attendance-button {
-  white-space: nowrap;
-  height: 50px !important;
-  width: 120px !important;
-  padding: 16px 24px !important;
-  margin-bottom: 4px;
-  font-size: 16px !important;
-}
-
-.attendance-table {
-  width: 100%;
-}
-
-.ant-table {
-  width: 100%;
-}
-
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
-  text-align: center !important;
-  font-weight: 400 !important;
-}
-
-.list-attendance-table .ant-table-thead > tr > th {
-  background-color: #052769 !important;
-  color: white !important;
-  font-weight: 400 !important;
-}
-
-/* Remove vertical borders between columns */
-.list-attendance-table .ant-table-thead > tr > th,
-.list-attendance-table .ant-table-tbody > tr > td {
-  border-left: none !important;
-  border-right: none !important;
-  border-top: none !important;
-  border-bottom: 1px solid #f0f0f0 !important;
-  box-shadow: none !important;
-}
-
-.list-attendance-table .ant-table table {
-  border-spacing: 0 !important;
-  border-collapse: collapse !important;
-}
-
-.ant-table-thead > tr > th {
-  box-shadow: none !important;
-}
-
-.list-attendance-table .ant-table-thead > tr > th {
-  border-left: none !important;
-  border-right: 0.5px solid #ffffff !important;
-  border-top: none !important;
-  box-shadow: none !important;
-  background-clip: padding-box !important;
-}
-
-/* Also remove possible pseudo-elements causing divider lines */
-.list-attendance-table .ant-table-thead > tr > th::before {
+.list-attendance-table::before,
+.list-attendance-table::after,
+.list-attendance-table *::before,
+.list-attendance-table *::after {
   display: none !important;
+  content: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.list-attendance-table .ant-table-container {
-  border-radius: 0 !important;
-}
-
-.list-attendance-table .ant-table-thead > tr > th {
-  border-radius: 0 !important;
-}
-
-.list-attendance-table .ant-table-container {
-  border: 1px solid #d9d9d9; /* Outer border */
-}
-
-/* For tablet devices and smaller screens */
 @media (max-width: 1024px) {
-  .list-attendance-container {
-    flex-direction: column;
-    /* Make sure the container switches to column layout */
-  }
-
-  .list-attendance-content {
-    width: 100%;
-    padding: 15px;
-    margin-left: 60px; /* Adjust margin-left on tablets */
-  }
-
-  .list-attendance-title {
-    font-size: 20px; /* Adjust font size for tablets */
-  
-  }
-
-  .list-attendance-button {
-    font-size: 16px; /* Increase button size for tablet screens */
-    padding: 12px 20px; /* Adjust button padding for tablets */
-  }
-
-  .list-table-wrapper {
-    width: 100%;
-    overflow-x: scroll; /* Enables horizontal scrolling on smaller screens */
-    margin-left: 0; /* Ensure no margin-left if sidebar is collapsed */
-  }
-
-  /* Make the table more responsive */
-  .list-attendance-table {
-    min-width: 800px; /* Ensure the table is wide enough */
-  }
-
-  .attendance-table {
-    min-width: 800px; /* Ensure it’s wide enough for horizontal scroll */
-  }
-
-  /* Ensure the columns in the table don’t shrink excessively */
-  .ant-table {
-    table-layout: fixed;
-  }
-
-  /* Sidebar handling for tablet devices */
-  .list-attendance-container.collapsed .list-attendance-content {
-    margin-left: 73px; /* Sidebar collapsed width */
-  }
-
-  .list-attendance-container.expanded .list-attendance-content {
-    margin-left: 208px; /* Sidebar expanded width */
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[10vw];
   }
 }
 
-/* For devices smaller than tablets (max-width: 768px) */
 @media (max-width: 768px) {
-
-  .list-attendance-container {
-    flex-direction: column;
-    /* Make sure the container switches to column layout */
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[3vw];
   }
 
-  .list-attendance-content {
-    width: 100%;
-    padding: 10px;
-    margin-left: 0; /* Remove extra margin-left */
+  .list-header-container {
+    @apply flex-col justify-center items-center text-center mt-4 mb-4;
   }
 
-  .list-attendance-title {
-    font-size: 18px; /* Adjust font size for small screens */
-   
+  .list-header-text h2 {
+    @apply text-sm;
+  }
+
+  .list-header-text p {
+    @apply text-xs;
+  }
+
+  .list-myt-logo {
+    @apply m-0;
   }
 
   .button-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+    @apply justify-center mb-0;
   }
 
-  .list-attendance-button {
-    font-size: 14px;
-    padding: 10px 18px; /* Adjust button padding */
+  .button-container button {
+    @apply w-24 h-10 px-2.5 text-sm;
   }
 
-  .list-table-wrapper {
-    width: 90%;
-    overflow-x: scroll; /* Horizontal scrolling for small screens */
-  }
-
-  .attendance-table {
-    min-width: 600px; /* Ensure the table has enough width */
-  }
-
-  /* Ensure no clipping when sidebar is collapsed on smaller screens */
-  .list-attendance-container.collapsed .list-attendance-content {
-    margin-left: 10px;
-  }
-
-  .list-attendance-container.expanded .list-attendance-content {
-    margin-left: 0;
+  .list-title-header {
+    @apply text-base mt-0;
   }
 }
 
 @media (max-width: 480px) {
-  .list-attendance-title {
-    font-size: 16px;
-  }
-
-  .list-attendance-button {
-    font-size: 12px;
-    padding: 5px;
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[5vw];
   }
 
   .button-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+    @apply justify-center my-2.5;
   }
 
-  .list-attendance-button {
-    white-space: nowrap;
-    height: 40px !important;
-    width: 90px !important;
-    padding: 16px 24px !important;
-    margin-bottom: 4px;
-    font-size: 12px !important;
-  }
-
-  /* Ensure the table wrapper adjusts on small devices */
   .list-table-wrapper {
-    width: 84% !important;
-    overflow-x: auto; /* Make sure horizontal scrolling is enabled */
+    @apply max-h-[50vh] mt-4;
   }
 
-  .attendance-table {
-    min-width: 600px; /* Ensure there's some width to enable scrolling */
-  }
-
-  /* Add left margin for smaller screens */
-  .list-attendance-content {
-    margin-left: 60px !important; /* Adjust as needed */
-  }
-
-  .myt-logo {
-    margin: 0 !important;
+  .list-title-header {
+    @apply text-sm mt-0;
   }
 }
 
-/* Sidebar handling (adjust based on whether sidebar is expanded/collapsed) */
-.list-attendance-container.collapsed .list-attendance-content {
-  margin-left: 73px; /* Sidebar collapsed width */
+.list-dashboard-content {
+  @apply flex flex-col flex-grow p-5 overflow-x-hidden -translate-x-[10px];
 }
 
-.list-attendance-container.expanded .list-attendance-content {
-  margin-left: 208px; /* Sidebar expanded width */
+@media (max-width: 1024px) {
+  .list-dashboard-content {
+    @apply p-2 m-0;
+  }
+
+  .list-table-wrapper {
+    @apply max-h-[50vh];
+  }
+
+  .list-title-header {
+    @apply text-base mt-4 mb-0;
+  }
 }
 
+.list-header-container {
+  @apply flex items-center;
+}
 
+.list-header-text h2,
+.list-company-name {
+  @apply text-base font-bold text-gray-800 mb-0;
+}
+
+.list-header-text p,
+.list-company-address {
+  @apply text-sm font-normal text-gray-800 mb-0;
+}
+
+.list-myt-logo {
+  @apply w-32 h-auto mr-6 mt-2.5;
+}
+
+.list-table-wrapper {
+  @apply overflow-auto max-h-[60vh] w-full;
+}
+
+.list-title-header {
+  @apply text-center text-xl font-bold uppercase mt-8;
+}
+
+.button-container {
+  @apply flex justify-end mb-2.5 mr-5;
+}
+
+.button-container button {
+  @apply px-8 h-[42px] py-2.5 text-sm ml-2.5;
+}
+
+.list-attendance-table .ant-table {
+  @apply w-full table-auto min-w-[700px] text-center border border-gray-300;
+}
+
+.list-attendance-table .ant-table-thead > tr > th {
+  @apply bg-[#052769] text-gray-100 border border-gray-300 text-center font-normal p-3 align-middle whitespace-normal;
+}
+
+.list-attendance-table .ant-table-tbody > tr > td {
+  @apply border-b border-gray-200 text-center font-normal p-3 align-middle whitespace-normal;
+}
+
+.list-attendance-table .ant-table-tbody > tr:hover > td {
+  @apply bg-gray-100;
+}

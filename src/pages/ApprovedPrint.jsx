@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Spin } from "antd";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
-import "../styles/ApprovedPrint.css";
+import "../styles/ApprovedPrint.css"; // Tailwind overrides here
 import { getRequest } from "../utils/apicalls";
 
 const ApprovedPrint = ({ internId }) => {
@@ -27,7 +27,9 @@ const ApprovedPrint = ({ internId }) => {
           school: response.data.school,
         });
         setApprovedRecords(
-          Array.isArray(response.data.timesheets) ? response.data.timesheets : []
+          Array.isArray(response.data.timesheets)
+            ? response.data.timesheets
+            : []
         );
       }
     } catch (error) {
@@ -123,7 +125,7 @@ const ApprovedPrint = ({ internId }) => {
           approvedByParts.length > 0
             ? approvedByParts[approvedByParts.length - 1]
             : "-";
-    
+
         const approvedOn = record.approved_on
           ? new Date(record.approved_on).toLocaleDateString("en-US", {
               year: "numeric",
@@ -131,11 +133,10 @@ const ApprovedPrint = ({ internId }) => {
               day: "numeric",
             })
           : "";
-    
+
         return `${lastName} (${approvedOn})`;
       },
-    }
-    
+    },
   ];
 
   return (

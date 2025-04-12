@@ -1,47 +1,39 @@
 /* internLogin.css */
 
-/* Flex container for centering */
 .intern-login-container {
-  @apply flex justify-center items-center min-h-screen bg-gray-100 p-4; /* Padding to avoid edge-clipping on small screens */
+  @apply flex justify-center items-center min-h-screen p-4; 
 }
 
-/* Form container with fixed height on all devices */
 .intern-form-container {
   @apply bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col justify-center w-full p-6 sm:p-8;
   max-width: 800px;
   min-width: 0;
-  width: 480px;
-  height: 500px; /* Fixed height on all screen sizes */
+  width: 420px;
+  height: 480px; 
   box-sizing: border-box;
 }
 
-/* Handle really narrow screens without changing height */
 @media (max-width: 400px) {
   .intern-form-container {
-    @apply px-6; /* Reduce side padding slightly */
-    width: 360px; /* Ensure it doesn't exceed screen width */
+    @apply px-6; 
+    width: 360px; 
     height: 410px;
-    
   }
 }
 
-/* Logo styling */
 .login-logo {
   @apply mx-auto mb-6 w-32 sm:w-40 h-16 object-contain;
 }
 
-/* Admin login link styling */
 .admin-login-link {
   @apply text-center mt-8 sm:mt-12;
 }
 
-/* Form input styling */
 .input-field {
   @apply w-full p-3 border border-gray-300 rounded-md text-base;
   min-height: 45px;
 }
 
-/* Ant Design error message fix */
 .ant-form-item {
   margin-bottom: 24px;
 }
@@ -53,34 +45,29 @@
   line-height: 1.25rem;
 }
 
-/* Login button styling */
 .btn-login {
   @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
 }
 
 @media (max-width: 768px) {
   .intern-form-container {
-    @apply px-16; /* Reduce side padding slightly */
+    @apply px-16; 
   }
 }
 
-/* Logo styling */
 .login-logo {
   @apply mx-auto mb-6 w-32 sm:w-40 h-16 object-contain;
 }
 
-/* Admin login link styling */
 .admin-login-link {
   @apply text-center mt-8 sm:mt-12;
 }
 
-/* Form input styling */
 .input-field {
   @apply w-full p-3 border border-gray-300 rounded-md text-base;
   min-height: 45px;
 }
 
-/* Ant Design error message fix */
 .ant-form-item {
   margin-bottom: 24px;
 }
@@ -92,35 +79,30 @@
   line-height: 1.25rem;
 }
 
-/* Login button styling */
 .btn-login {
   @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
 }
 
 @media (max-width: 1024px) {
   .intern-form-container {
-    max-width: 80%; /* Adjust width to fit 1024px screens better */
-    @apply px-10; /* Add some padding, but keep it responsive */
+    max-width: 80%;
+    @apply px-10; 
   }
 }
 
-/* Logo styling */
 .login-logo {
   @apply mx-auto mb-6 w-36 sm:w-40 h-16 object-contain;
 }
 
-/* Admin login link styling */
 .admin-login-link {
   @apply text-center mt-8 sm:mt-12;
 }
 
-/* Form input styling */
 .input-field {
   @apply w-full p-3 border border-gray-300 rounded-md text-base;
   min-height: 45px;
 }
 
-/* Ant Design error message fix */
 .ant-form-item {
   margin-bottom: 24px;
 }
@@ -132,7 +114,6 @@
   line-height: 1.25rem;
 }
 
-/* Login button styling */
 .btn-login {
   @apply mt-4 py-4 sm:py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-md text-base sm:text-lg;
 }

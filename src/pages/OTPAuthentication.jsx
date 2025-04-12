@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Form, Input, Button, message, Spin, Statistic } from "antd";
 import { postRequest } from "../utils/apicalls";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "../styles/OTPAuthentication.css";
 
 const { Countdown } = Statistic;
@@ -28,7 +26,6 @@ const OTPAuthentication = () => {
 
       const payload = {
         email,
-        requester: 1,
       };
 
       const response = await postRequest("interns/generate_otp", payload);
@@ -39,7 +36,7 @@ const OTPAuthentication = () => {
         message.error(response.message);
       }
     } catch (error) {
-      alert("Failed to generate OTP. Please try again.");
+      message.error("Failed to generate OTP. Please try again.");
     } finally {
       setLoadingGenerate(false);
     }
@@ -58,7 +55,6 @@ const OTPAuthentication = () => {
 
     const payload = {
       email,
-      requester: 1,
     };
 
     try {
@@ -69,10 +65,10 @@ const OTPAuthentication = () => {
         setDeadline(Date.now() + 300000);
         setOtpExpired(false);
       } else {
-        message.error(response.message || "Failed to resend OTP.");
+        message.error(response.message);
       }
     } catch (error) {
-      toast.error("Failed to resend OTP. Please try again.");
+      message.error("Failed to resend OTP. Please try again.");
     } finally {
       setLoadingResend(false);
     }
@@ -83,8 +79,7 @@ const OTPAuthentication = () => {
     const otpString = otp.join("");
 
     if (otpExpired) {
-      toast.error("This OTP has expired. Please request a new one.", {
-        position: "top-center",
+      message.error("This OTP has expired. Please request a new one.", {
         autoClose: 2000,
       });
       return;
@@ -95,19 +90,13 @@ const OTPAuthentication = () => {
       const payload = { email, otp: otpString };
       const response = await postRequest("interns/verify_otp", payload);
 
-      if (
-        response.message === "OTP verified successfully." ||
-        response.message === "Intern logged in successfully."
-      ) {
+      if (response.message === "Intern logged in successfully.") {
         message.success(response.message);
+
         if (response.token) {
           localStorage.setItem("authToken", response.token);
-          localStorage.setItem("tokenExpiry", response.token_expiry);
-        }
-        if (response.id) {
           localStorage.setItem("requester", response.id);
         }
-        localStorage.setItem("email", email);
         navigate("/dashboard");
       } else {
         message.error("Invalid OTP. Please try again.");
@@ -142,7 +131,6 @@ const OTPAuthentication = () => {
 
   return (
     <div className="otp-container">
-      <ToastContainer />
       <h2 className="otp-title">Email Verification</h2>
       <p className="otp-subtext">Please enter the OTP sent to your email.</p>
       <p className="otp-countdown">
@@ -153,7 +141,12 @@ const OTPAuthentication = () => {
         />
       </p>
 
-      <Form name="otp-form" onFinish={handleVerifyOTP} layout="vertical" className="w-full">
+      <Form
+        name="otp-form"
+        onFinish={handleVerifyOTP}
+        layout="vertical"
+        className="w-full"
+      >
         <div className="otp-inputs">
           {otp.map((value, index) => (
             <Input

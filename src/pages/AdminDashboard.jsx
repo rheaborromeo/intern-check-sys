@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tabs, Checkbox, message, Button, Pagination } from "antd";
+import { Table, Tabs, Checkbox, message, Button, Pagination, Tag } from "antd";
 import AdminSidebar from "../components/AdminSidebar";
 import "../styles/AdminDashboard.css";
 import { getRequest, postRequest } from "../utils/apicalls";
@@ -19,18 +19,34 @@ const AdminDashboard = () => {
   const [selectedRecords, setSelectedRecords] = useState({});
   const [pagination, setPagination] = useState({ offset: 0, limit: 10 });
   const [activeTab, setActiveTab] = useState("pending");
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    // Check the window size on resize
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     fetchAttendance(activeTab, pagination.offset, pagination.limit);
   }, [activeTab, pagination]);
 
-  const fetchAttendance = async (status = "pending", offset = 0, limit = 10) => {
+  const fetchAttendance = async (
+    status = "pending",
+    offset = 0,
+    limit = 10
+  ) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
       const requester = localStorage.getItem("requester");
       const url = `timesheets/get_timesheets_by_status?token=${token}&requester=${requester}&status=${status}&offset=${offset}&limit=${limit}`;
-      
+
       const response = await getRequest(url);
       if (response && response.data) {
         setData((prevData) => ({
@@ -39,7 +55,6 @@ const AdminDashboard = () => {
         }));
       }
     } catch (error) {
-      console.error("Error fetching attendance:", error);
     } finally {
       setLoading(false);
     }
@@ -118,7 +133,7 @@ const AdminDashboard = () => {
       width: 50,
     },
     {
-      title: "Setup", 
+      title: "Setup",
       key: "setup",
       render: (record) => {
         const formatModality = (modality) => {
@@ -182,15 +197,16 @@ const AdminDashboard = () => {
   ];
 
   const renderPagination = () => (
-    <Pagination
-      current={pagination.offset / pagination.limit + 1}
-      pageSize={pagination.limit}
-      total={data[activeTab]?.length || 0}
-      onChange={(page, pageSize) => {
-        setPagination({ offset: (page - 1) * pageSize, limit: pageSize });
-      }}
-      style={{ marginTop: "16px", textAlign: "right" }}
-    />
+    <div className="mt-4 flex justify-start lg:justify-end">
+      <Pagination
+        current={pagination.offset / pagination.limit + 1}
+        pageSize={pagination.limit}
+        total={data[activeTab]?.length || 0}
+        onChange={(page, pageSize) => {
+          setPagination({ offset: (page - 1) * pageSize, limit: pageSize });
+        }}
+      />
+    </div>
   );
 
   return (
@@ -200,40 +216,54 @@ const AdminDashboard = () => {
       }`}
     >
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
-      <div className="admin-dashboard-content">
-        <div className="admin-header-container">
-          <img src={mytLogo} alt="MYT Logo" className="myt-logo" />
-          <div className="header-text">
-            <h2 className="company-name">MYT SoftDev Solutions, Inc.</h2>
-            <p className="company-address">
+      <div className="admin-dashboard-content overflow-y-auto p-4">
+        <div className="admin-header-container mt-4">
+          <img src={mytLogo} alt="MYT Logo" className="admin-myt-logo" />
+          <div className="admin-header-text">
+            <h2 className="admin-company-name text-xl font-bold">
+              MYT SoftDev Solutions, Inc.
+            </h2>
+            <p className="admin-company-address text-sm">
               301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu
             </p>
           </div>
         </div>
-        <h3 className="title-header">Monitoring Records</h3>
+        <h3 className="admin-title-header mt-4 text-lg font-semibold">
+          Monitoring Records
+        </h3>
         <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
           <TabPane tab="Pending" key="pending">
-            <Checkbox
-              onChange={(e) => {
-                const checked = e.target.checked;
-                const updatedSelection = {};
-                data.pending.forEach((record) => {
-                  updatedSelection[record.id] = checked;
-                });
-                setSelectedRecords(updatedSelection);
-              }}
-              checked={
-                data.pending.length > 0 &&
-                data.pending.every((record) => selectedRecords[record.id])
-              }
-              indeterminate={
-                Object.values(selectedRecords).some(Boolean) &&
-                !data.pending.every((record) => selectedRecords[record.id])
-              }
-              style={{ marginBottom: 10 }}
-            >
-              Select All
-            </Checkbox>
+            <div className="flex items-center justify-between mb-4">
+              <Checkbox
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  const updatedSelection = {};
+                  data.pending.forEach((record) => {
+                    updatedSelection[record.id] = checked;
+                  });
+                  setSelectedRecords(updatedSelection);
+                }}
+                checked={
+                  data.pending.length > 0 &&
+                  data.pending.every((record) => selectedRecords[record.id])
+                }
+                indeterminate={
+                  Object.values(selectedRecords).some(Boolean) &&
+                  !data.pending.every((record) => selectedRecords[record.id])
+                }
+              >
+                Select All
+              </Checkbox>
+
+              <div className="flex gap-2">
+                <Button type="primary" onClick={approveSelected}>
+                  Approve
+                </Button>
+                <Button type="primary" danger onClick={disapproveSelected}>
+                  Disapprove
+                </Button>
+              </div>
+            </div>
 
             <div className="admin-monitoring-table-wrapper">
               <Table
@@ -266,15 +296,8 @@ const AdminDashboard = () => {
                 className="admin-monitoring-table"
               />
             </div>
+
             {renderPagination()}
-            <div className="button-container">
-              <Button type="primary" onClick={approveSelected} className="approve-btn">
-                Approve
-              </Button>
-              <Button type="danger" onClick={disapproveSelected} className="disapprove-btn">
-                Disapprove
-              </Button>
-            </div>
           </TabPane>
 
           <TabPane tab="Approved" key="approved">
@@ -321,33 +344,51 @@ const AdminDashboard = () => {
             {renderPagination()}
           </TabPane>
 
-          <TabPane tab="All" key="all">
-            <div className="admin-monitoring-table-wrapper">
-              <Table
-                columns={[
-                  {
-                    title: "Name",
-                    dataIndex: "full_name",
-                    key: "full_name",
-                    width: 50,
-                  },
-                  ...columnsBase,
-                  {
-                    title: "Status",
-                    dataIndex: "status",
-                    key: "status",
-                    width: 50,
-                  },
-                ]}
-                dataSource={data.all}
-                rowKey="id"
-                loading={loading}
-                pagination={false}
-                className="admin-monitoring-table"
-              />
-            </div>
-            {renderPagination()}
-          </TabPane>
+          {isDesktop && (
+            <TabPane tab="All" key="all">
+              <div className="admin-monitoring-table-wrapper">
+                <Table
+                  columns={[
+                    {
+                      title: "Name",
+                      dataIndex: "full_name",
+                      key: "full_name",
+                      width: 50,
+                    },
+                    ...columnsBase,
+                    {
+                      title: "Status",
+                      dataIndex: "status",
+                      key: "status",
+                      width: 50,
+                      render: (text) => {
+                        let color = "default";
+                        if (text === "approved") {
+                          color = "green";
+                        } else if (text === "disapproved") {
+                          color = "red";
+                        } else if (text === "pending") {
+                          color = "blue";
+                        }
+
+                        return text === "absent" ? (
+                          ""
+                        ) : (
+                          <Tag color={color}>{text}</Tag>
+                        );
+                      },
+                    },
+                  ]}
+                  dataSource={data.all}
+                  rowKey="id"
+                  loading={loading}
+                  pagination={false}
+                  className="admin-monitoring-table"
+                />
+              </div>
+              {renderPagination()}
+            </TabPane>
+          )}
         </Tabs>
       </div>
     </div>

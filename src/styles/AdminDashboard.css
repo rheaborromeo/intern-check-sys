@@ -1,469 +1,223 @@
-/* Base Styles */
+
+
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  font-size: 16px;
-  box-sizing: border-box;
+  @apply h-full m-0 p-0 overflow-x-hidden overflow-y-hidden box-border bg-white;
 }
 
+
 .admin-dashboard-container {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  background-color: white;
+  @apply w-screen flex flex-row justify-center min-h-screen;
+}
+
+.admin-header-text h2 {
+  @apply text-base font-bold text-gray-800 mb-0;
+}
+
+.admin-header-text p {
+  @apply text-base font-normal text-gray-800 mb-0;
+}
+
+.admin-myt-logo {
+  @apply w-32 h-auto mr-6;
+}
+
+.select-all-and-buttons {
+  @apply flex items-center gap-4 mb-4;
+}
+
+.admin-title-header {
+  @apply text-center text-lg font-bold uppercase;
 }
 
 .admin-header-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 0;
-  margin-bottom: 10px;
-  border-bottom: none;
+  @apply flex items-center;
+ 
 }
 
+
 .admin-dashboard-content {
-  flex-grow: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  margin-top: 20px;
+  @apply flex-grow p-5 flex flex-col;
 }
 
 .approve-btn {
-  background-color: #00189e;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  transition: background 0.3s ease;
-  justify-content: right;
+  @apply bg-blue-900 text-white border-0 px-4 py-2 cursor-pointer mb-2 mr-2 transition-colors ease-in-out;
 }
 
 .approve-btn:hover {
-  background-color: #00189e !important;
+  @apply bg-blue-900;
 }
 
 .disapprove-btn {
-  background-color: #00189e;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  transition: background 0.3s ease;
+  @apply bg-blue-900 text-white border-0 px-4 py-2 cursor-pointer mb-2 transition-colors ease-in-out;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px !important;
-  margin-bottom: 10px;
+.admin-button-container {
+  @apply flex justify-end mb-2;
 }
 
 .button-container .ant-btn {
-  font-size: 16px;
-  padding: 10px 20px;
-  height: 46px;
-  width: 106px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  @apply text-base px-5 py-2.5 h-[46px] w-[106px] flex items-center justify-center text-center;
 }
 
+/* Expanded/Collapsed State */
+.admin-dashboard-container.expanded .admin-dashboard-content,
 .admin-dashboard-container.collapsed .admin-dashboard-content {
-  margin-left: 80px;
+  @apply ml-[6vw];
 }
 
+/* Ant Design Overrides */
 .ant-tabs {
-  margin-bottom: 16px;
+  @apply mb-4;
 }
 
 .ant-table {
-  width: 100%;
+  @apply w-full text-center;
 }
 
 .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td {
-  text-align: center !important;
-  font-weight: 400 !important;
+  @apply text-center font-normal;
 }
 
 .admin-monitoring-table .ant-table {
-  width: 100%;
-  border-spacing: 0 !important;
-  border: 1px solid #d9d9d9;
+  @apply w-full border-spacing-0 border border-gray-300;
 }
 
 .admin-monitoring-table .ant-table-thead > tr > th,
 .admin-monitoring-table .ant-table-tbody > tr > td {
-  text-align: center !important;
-  font-weight: 400 !important;
-  border: none !important;
-  box-shadow: none !important;
+  @apply text-center font-normal border-0 shadow-none;
 }
 
 .admin-monitoring-table .ant-table-thead > tr > th {
-  color: rgb(243, 243, 243) !important;
-  font-weight: 400 !important;
-  border: 0.2px solid #d9d9d9 !important;
-  box-shadow: none !important;
-  background-clip: padding-box !important;
-  background-color: #052769;
-  padding: 14px 4px;
-  line-height: 1.2 !important;
-  word-break: break-word;
-  white-space: normal !important;
-  text-align: center;
-  vertical-align: middle;
+  @apply bg-[#052769] text-white border-[1px] border-gray-300 shadow-none font-normal py-4 px-1.5 leading-5 break-words whitespace-normal align-middle text-center;
 }
 
 .admin-monitoring-table .ant-table-thead > tr > th::before {
-  display: none !important;
+  @apply hidden;
 }
 
-.page-header {
-  text-align: center;
+.admin-monitoring-table-wrapper {
+  @apply overflow-y-auto max-h-[50vh];
 }
 
-.title-header {
-  text-align: center;
-}
+/* Media Queries */
 
-/* Responsive: max-width 1024px */
+/* 1024px and below */
 @media (max-width: 1024px) {
   html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .ant-table {
-    overflow-x: auto;
-    overflow-y: auto;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 0 !important;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 90px !important;
+    @apply h-full overflow-x-auto overflow-y-auto;
   }
 
   .admin-monitoring-table-wrapper {
-    max-height: 300px;
+    @apply overflow-x-auto max-h-[50vh];
   }
 
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    font-size: 14px !important;
+  .admin-monitoring-table .ant-table {
+    @apply min-w-[900px];
   }
 
-  .ant-tabs-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ant-tabs-tab {
-    flex: 1;
-    text-align: center;
-  }
-
-  .ant-tabs-tab-btn {
-    font-size: 14px;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 80px;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 60px;
-  }
-}
-
-/* Responsive: max-width 768px */
-@media (max-width: 768px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .ant-table {
-    overflow-x: auto;
-    min-width: 600px;
-  }
-
-  .admin-monitoring-table-wrapper {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    font-size: 14px !important;
-  }
-
-  .ant-tabs-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ant-tabs-tab {
-    flex: 1;
-    text-align: center;
-  }
-
-  .ant-tabs-tab-btn {
-    font-size: 14px;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 0 !important;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 80px !important;
-  }
-}
-
-/* Responsive: max-width 1024px */
-@media (max-width: 1024px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .ant-table {
-    overflow-x: auto;
-    overflow-y: auto;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 0 !important;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 90px !important;
-  }
-
-  .admin-monitoring-table-wrapper {
-    max-height: 300px;
-  }
-
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    font-size: 14px !important;
-  }
-
-  .ant-tabs-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ant-tabs-tab {
-    flex: 1;
-    text-align: center;
-  }
-
-  .ant-tabs-tab-btn {
-    font-size: 14px;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 80px;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 60px;
-  }
-}
-
-/* Responsive: max-width 900px (Tablets and larger phones) */
-@media (max-width: 900px) {
-  .ant-table {
-    font-size: 13px !important;
-    min-width: 700px;
-  }
-
-  .admin-dashboard-content {
-    padding: 16px;
-  }
-
-  .ant-tabs-tab-btn {
-    font-size: 13px;
-  }
-
-  .admin-monitoring-table-wrapper {
-    max-height: 340px;
-  }
-}
-
-/* Responsive: max-width 768px */
-@media (max-width: 768px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .ant-table {
-    overflow-x: auto;
-    min-width: 600px;
-  }
-
-  .admin-monitoring-table-wrapper {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    font-size: 14px !important;
-  }
-
-  .ant-tabs-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .ant-tabs-tab {
-    flex: 1;
-    text-align: center;
-  }
-
-  .ant-tabs-tab-btn {
-    font-size: 14px;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 0 !important;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 80px !important;
-  }
-}
-
-/* Responsive: max-width 600px (Small tablets & Large phones) */
-@media (max-width: 600px) {
-  .ant-table {
-    overflow-x: auto;
-    min-width: 500px;
-  }
-
-  .admin-monitoring-table-wrapper {
-    max-height: 420px;
-  }
-
-  .ant-table-thead > tr > th,
-  .ant-table-tbody > tr > td {
-    font-size: 13px !important;
-  }
-
-  .approve-btn,
-  .disapprove-btn {
-    font-size: 14px;
-    padding: 8px 16px;
-  }
-
-  .admin-dashboard-content {
-    margin-left: 10px !important;
-  }
-}
-
-/* Responsive: max-width 480px (Phones) */
-@media (max-width: 480px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
+  .admin-dashboard-container {
+    @apply w-[90vw] flex flex-row justify-center min-h-screen;
   }
 
   .admin-header-container {
-    display: flex;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    padding: 20px;
-    margin: 0;
+    @apply flex items-center;
+    /* Apply mt-4 directly in your JSX/HTML instead of here */
   }
+}
 
-  .admin-dashboard-content {
-    margin: 0;
-    padding: 10px;
-  }
-
-  .admin-dashboard-container.collapsed .admin-dashboard-content {
-    margin-left: 80px !important;
+/* 768px and below */
+@media (max-width: 768px) {
+  html, body {
+    @apply h-full overflow-hidden;
   }
 
   .ant-table {
-    overflow-x: auto;
-    min-width: 600px;
-    overflow-y: auto;
+    @apply overflow-x-auto min-w-[500px];
   }
 
   .admin-monitoring-table-wrapper {
-    max-height: 360px;
-    overflow-y: auto;
-  }
-
-  .approve-btn,
-  .disapprove-btn {
-    font-size: 12px;
-    padding: 6px 12px;
-    height: 40px !important;
-    width: 80px !important;
-    font-size: 14px !important;
+    @apply max-h-[40vh];
   }
 
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td {
-    font-size: 10px !important;
+    @apply text-sm;
   }
 
-  .title-header {
-    font-size: 14px;
+  .ant-tabs-nav {
+    @apply flex flex-wrap justify-center;
+  }
+
+  .ant-tabs-tab {
+    @apply flex-1 text-center;
+  }
+
+  .ant-tabs-tab-btn {
+    @apply text-sm;
+  }
+
+  .admin-dashboard-content {
+    @apply ml-0;
+  }
+
+  .admin-header-container {
+    @apply mt-4;
+  }
+  .admin-dashboard-container {
+    @apply w-[100vw] mr-10;
   }
 }
 
-/* Responsive: max-width 400px (Small phones) */
-@media (max-width: 400px) {
+@media (max-width: 540px) {
   html, body {
-    height: 100%;
-    overflow: hidden !important;
+    @apply h-full overflow-hidden;
+  }
+
+  .admin-header-text h2 {
+    @apply text-sm font-bold text-gray-800;
+  }
+
+  .admin-header-text p {
+    @apply text-xs text-gray-800;
+  }
+
+  .admin-header-container {
+    @apply flex-col justify-center items-center text-center;
+    
+  }
+
+  .admin-dashboard-container {
+    @apply w-full flex flex-row justify-center min-h-screen;
+  }
+
+  .admin-dashboard-content {
+    @apply m-0 p-2.5;
   }
 
   .ant-table {
-    overflow-x: auto;
-    min-width: 500px;
+    @apply overflow-x-auto min-w-[600px] overflow-y-hidden;
   }
 
   .approve-btn,
   .disapprove-btn {
-    font-size: 11px;
-    padding: 5px 10px;
-    height: 35px !important;
-    width: 70px !important;
+    @apply text-xs px-3 py-1.5 h-10 w-20;
   }
 
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td {
-    font-size: 9px !important;
+    @apply text-xs;
   }
 
-  .title-header {
-    font-size: 12px;
+  .admin-title-header {
+    @apply text-sm m-0;
+  }
+
+  .admin-monitoring-table-wrapper {
+    @apply max-h-[40vh];
+  }
+
+  .admin-dashboard-container {
+    @apply w-[100vw] mr-6;
   }
 }
-

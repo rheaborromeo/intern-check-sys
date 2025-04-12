@@ -1,41 +1,118 @@
-/* OTP Container */
-/* OTP Container */
 .otp-container {
-  @apply bg-white w-full max-w-[600px] p-4 sm:p-6 md:p-8 shadow-xl rounded-xl flex flex-col items-center justify-center mx-auto min-h-[60vh] sm:min-h-[65vh] md:min-h-[70vh];
+  @apply bg-white w-full max-w-[600px] p-6 sm:p-8 md:p-10 rounded-xl flex flex-col items-center justify-center mx-auto;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05), 0 6px 12px rgba(0, 0, 0, 0.1); 
 }
 
-
-/* OTP Title */
 .otp-title {
-  @apply text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6;
+  @apply text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4;
 }
 
-/* OTP Subtext */
 .otp-subtext {
-  @apply text-sm sm:text-base text-gray-500 mb-2 sm:mb-3 text-center;
+  @apply text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3 text-center; 
 }
 
-/* OTP Countdown */
 .otp-countdown {
-  @apply text-base sm:text-lg font-medium text-gray-900 mb-4 sm:mb-6;
+  @apply text-sm sm:text-base font-medium text-gray-900 mb-4 sm:mb-5;
 }
 
-/* OTP Inputs Container */
 .otp-inputs {
-  @apply flex justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 flex-wrap;
+  @apply flex justify-center gap-3 sm:gap-4 mb-4 sm:mb-5 flex-wrap; 
 }
 
-/* OTP Input */
 .otp-input {
-  @apply w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] text-xl sm:text-2xl text-center border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+  @apply w-[40px] h-[40px] sm:w-[56px] sm:h-[56px] text-lg sm:text-xl text-center border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200; 
 }
 
-/* OTP Button */
 .otp-button {
-  @apply w-full py-4 sm:py-5 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-lg transition-all duration-200;
+  @apply w-full py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-base font-semibold rounded-lg transition-all duration-200;
 }
 
-/* Resend OTP Button */
 .resend-otp-button {
-  @apply w-full py-4 sm:py-5 mt-2 sm:mt-3 border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-black text-base font-semibold rounded-lg transition-all duration-200;
+  @apply w-full py-2 sm:py-3 mt-1 sm:mt-2 border border-gray-300 hover:border-gray-400 text-base font-semibold text-gray-700 hover:text-black rounded-lg transition-all duration-200;
+  margin-top: 0 !important; 
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 480px) {
+  .otp-container {
+    @apply p-4; 
+    height: 398px; 
+  }
+  .otp-title {
+    @apply text-base;
+  }
+  .otp-subtext {
+    @apply text-xs;
+  }
+  .otp-countdown {
+    @apply text-xs; 
+  }
+  .otp-inputs {
+    @apply gap-3;
+  }
+  .otp-input {
+    @apply w-[40px] h-[40px] text-lg; 
+  }
+  .otp-button {
+    @apply py-3; 
+  }
+  .resend-otp-button {
+    @apply py-3 mt-2;
+  }
+}
+
+@media (min-width: 768px) {
+  .otp-container {
+    @apply p-6;
+    height: 550px;
+  }
+  .otp-title {
+    @apply text-base;
+  }
+  .otp-subtext {
+    @apply text-sm; 
+  }
+  .otp-countdown {
+    @apply text-sm; 
+  }
+  .otp-inputs {
+    @apply gap-4;
+  }
+  .otp-input {
+    @apply w-[56px] h-[56px] text-xl; 
+  }
+  .otp-button {
+    @apply py-4;
+  }
+  .resend-otp-button {
+    @apply py-4 mt-2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .otp-container {
+    @apply max-w-[700px];
+    height: 480px; 
+  }
+  .otp-title {
+    @apply text-base; 
+  }
+  .otp-subtext {
+    @apply text-base; 
+  }
+  .otp-countdown {
+    @apply text-base; 
+  }
+  .otp-inputs {
+    @apply gap-4; 
+  }
+  .otp-input {
+    @apply w-[56px] h-[56px] text-2xl; 
+  }
+  .otp-button {
+    @apply py-5;
+  }
+  .resend-otp-button {
+    @apply py-5 mt-3;
+  }
 }
