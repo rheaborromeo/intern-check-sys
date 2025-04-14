@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { postRequest } from "../utils/apicalls";
-import "../styles/AdminLogin.css"; // Import the TailwindCSS file
+import "../styles/adminlogin.css"; // Import the TailwindCSS file
 
 import logo from "../image/logo_.png";
 

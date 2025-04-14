@@ -103,10 +103,6 @@ const Sidebar = ({ collapsed, onCollapse }) => {
             src={internCheckLogo}
             alt="Intern Check"
             className="web-logo transition-all duration-300 w-[90px] h-[90px]"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "https://via.placeholder.com/90"; // fallback image
-            }}
           />
         )}
       </div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Tabs, Checkbox, message, Button, Pagination, Tag } from "antd";
 import AdminSidebar from "../components/AdminSidebar";
-import "../styles/AdminDashboard.css";
 import { getRequest, postRequest } from "../utils/apicalls";
+import "../styles/admindashboard.css";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
 
 const { TabPane } = Tabs;
@@ -19,18 +19,6 @@ const AdminDashboard = () => {
   const [selectedRecords, setSelectedRecords] = useState({});
   const [pagination, setPagination] = useState({ offset: 0, limit: 10 });
   const [activeTab, setActiveTab] = useState("pending");
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-
-  useEffect(() => {
-    // Check the window size on resize
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth > 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     fetchAttendance(activeTab, pagination.offset, pagination.limit);
@@ -211,13 +199,11 @@ const AdminDashboard = () => {
 
   return (
     <div
-      className={`admin-dashboard-container ${
-        collapsed ? "collapsed" : "expanded"
-      }`}
+      className={`admin-dashboard-container ${collapsed ? "collapsed" : "expanded"}`}
     >
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
       <div className="admin-dashboard-content overflow-y-auto p-4">
-        <div className="admin-header-container mt-4">
+        <div className="admin-header-container">
           <img src={mytLogo} alt="MYT Logo" className="admin-myt-logo" />
           <div className="admin-header-text">
             <h2 className="admin-company-name text-xl font-bold">
@@ -231,7 +217,7 @@ const AdminDashboard = () => {
         <h3 className="admin-title-header mt-4 text-lg font-semibold">
           Monitoring Records
         </h3>
-        <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
+        <Tabs type="card" activeKey={activeTab} onChange={(key) => setActiveTab(key)} className="mt-4">
           <TabPane tab="Pending" key="pending">
             <div className="flex items-center justify-between mb-4">
               <Checkbox
@@ -274,9 +260,7 @@ const AdminDashboard = () => {
                     render: (_, record) => (
                       <Checkbox
                         checked={selectedRecords[record.id] || false}
-                        onChange={(e) =>
-                          onSelectChange(record, e.target.checked)
-                        }
+                        onChange={(e) => onSelectChange(record, e.target.checked)}
                       />
                     ),
                     width: 50,
@@ -344,51 +328,49 @@ const AdminDashboard = () => {
             {renderPagination()}
           </TabPane>
 
-          {isDesktop && (
-            <TabPane tab="All" key="all">
-              <div className="admin-monitoring-table-wrapper">
-                <Table
-                  columns={[
-                    {
-                      title: "Name",
-                      dataIndex: "full_name",
-                      key: "full_name",
-                      width: 50,
-                    },
-                    ...columnsBase,
-                    {
-                      title: "Status",
-                      dataIndex: "status",
-                      key: "status",
-                      width: 50,
-                      render: (text) => {
-                        let color = "default";
-                        if (text === "approved") {
-                          color = "green";
-                        } else if (text === "disapproved") {
-                          color = "red";
-                        } else if (text === "pending") {
-                          color = "blue";
-                        }
+          <TabPane tab="All" key="all">
+            <div className="admin-monitoring-table-wrapper">
+              <Table
+                columns={[
+                  {
+                    title: "Name",
+                    dataIndex: "full_name",
+                    key: "full_name",
+                    width: 50,
+                  },
+                  ...columnsBase,
+                  {
+                    title: "Status",
+                    dataIndex: "status",
+                    key: "status",
+                    width: 50,
+                    render: (text) => {
+                      let color = "default";
+                      if (text === "approved") {
+                        color = "green";
+                      } else if (text === "disapproved") {
+                        color = "red";
+                      } else if (text === "pending") {
+                        color = "blue";
+                      }
 
-                        return text === "absent" ? (
-                          ""
-                        ) : (
-                          <Tag color={color}>{text}</Tag>
-                        );
-                      },
+                      return text === "absent" ? (
+                        ""
+                      ) : (
+                        <Tag color={color}>{text}</Tag>
+                      );
                     },
-                  ]}
-                  dataSource={data.all}
-                  rowKey="id"
-                  loading={loading}
-                  pagination={false}
-                  className="admin-monitoring-table"
-                />
-              </div>
-              {renderPagination()}
-            </TabPane>
-          )}
+                  },
+                ]}
+                dataSource={data.all}
+                rowKey="id"
+                loading={loading}
+                pagination={false}
+                className="admin-monitoring-table"
+              />
+            </div>
+            {renderPagination()}
+          </TabPane>
         </Tabs>
       </div>
     </div>

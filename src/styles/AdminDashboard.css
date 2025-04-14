@@ -1,9 +1,6 @@
-
-
 html, body {
   @apply h-full m-0 p-0 overflow-x-hidden overflow-y-hidden box-border bg-white;
 }
-
 
 .admin-dashboard-container {
   @apply w-screen flex flex-row justify-center min-h-screen;
@@ -18,22 +15,21 @@ html, body {
 }
 
 .admin-myt-logo {
-  @apply w-32 h-auto mr-6;
+  @apply w-32 h-auto mr-6 mt-5 mb-1;
 }
 
 .select-all-and-buttons {
   @apply flex items-center gap-4 mb-4;
 }
 
-.admin-title-header {
-  @apply text-center text-lg font-bold uppercase;
+.admin-title-header  {
+  @apply text-center text-lg font-bold uppercase mt-8;
+  margin-top: 2rem !important;
 }
 
 .admin-header-container {
-  @apply flex items-center;
- 
+  @apply flex items-center; 
 }
-
 
 .admin-dashboard-content {
   @apply flex-grow p-5 flex flex-col;
@@ -59,13 +55,11 @@ html, body {
   @apply text-base px-5 py-2.5 h-[46px] w-[106px] flex items-center justify-center text-center;
 }
 
-/* Expanded/Collapsed State */
 .admin-dashboard-container.expanded .admin-dashboard-content,
 .admin-dashboard-container.collapsed .admin-dashboard-content {
   @apply ml-[6vw];
 }
 
-/* Ant Design Overrides */
 .ant-tabs {
   @apply mb-4;
 }
@@ -100,9 +94,6 @@ html, body {
   @apply overflow-y-auto max-h-[50vh];
 }
 
-/* Media Queries */
-
-/* 1024px and below */
 @media (max-width: 1024px) {
   html, body {
     @apply h-full overflow-x-auto overflow-y-auto;
@@ -120,13 +111,11 @@ html, body {
     @apply w-[90vw] flex flex-row justify-center min-h-screen;
   }
 
-  .admin-header-container {
-    @apply flex items-center;
-    /* Apply mt-4 directly in your JSX/HTML instead of here */
+  .admin-myt-logo {
+    @apply w-40 h-auto;
   }
 }
 
-/* 768px and below */
 @media (max-width: 768px) {
   html, body {
     @apply h-full overflow-hidden;
@@ -143,6 +132,10 @@ html, body {
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td {
     @apply text-sm;
+  }
+
+  .admin-monitoring-table .ant-table-thead > tr > th {
+    @apply leading-4; 
   }
 
   .ant-tabs-nav {
@@ -162,14 +155,19 @@ html, body {
   }
 
   .admin-header-container {
-    @apply mt-4;
+    @apply mt-2;
   }
+
   .admin-dashboard-container {
     @apply w-[100vw] mr-10;
   }
+
+  .admin-myt-logo {
+    @apply w-36 h-auto;
+  }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 480px) {
   html, body {
     @apply h-full overflow-hidden;
   }
@@ -184,7 +182,6 @@ html, body {
 
   .admin-header-container {
     @apply flex-col justify-center items-center text-center;
-    
   }
 
   .admin-dashboard-container {
@@ -221,3 +218,26 @@ html, body {
     @apply w-[100vw] mr-6;
   }
 }
+@media (max-width: 320px) {
+  .ant-tabs-nav {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+  }
+
+  .ant-tabs-tab {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    flex: 1 0 100% !important; /* Make each tab take full width or auto */
+    text-align: center;
+  }
+
+  .ant-tabs-nav-list {
+    flex-wrap: wrap !important;
+  }
+
+  .ant-tabs-nav-operations {
+    display: none !important; /* Hide the ... dropdown */
+  }
+}
+

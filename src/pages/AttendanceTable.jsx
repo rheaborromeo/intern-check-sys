@@ -3,10 +3,10 @@ import { Table, Button, Tag, Spin, Select, Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../utils/apicalls";
 import Sidebar from "../components/Sidebar";
-import "../styles/AttendanceTable.css";
+import "../styles/attendancetable.css";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
 
-const AttendanceTable = () => {
+const AttendanceTable= () => {
   const [collapsed, setCollapsed] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 10 });
@@ -14,12 +14,20 @@ const AttendanceTable = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasTimedOutToday, setHasTimedOutToday] = useState(false);
-  const [totalApprovedHours, setTotalApprovedHours] = useState(0); // Track the total approved hours here
+  const [totalApprovedHours, setTotalApprovedHours] = useState(0);
+  const [studentInfo, setStudentInfo] = useState({ name: "", school: "" });
+  const [approvedTimesheets, setApprovedTimesheets] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAttendance(pagination.page, pagination.pageSize);
   }, [pagination.page, pagination.pageSize]);
+
+  useEffect(() => {
+
+    fetchStudentInfo();
+  }, []);
 
   const fetchAttendance = async (page, pageSize) => {
     setLoading(true);
@@ -39,7 +47,6 @@ const AttendanceTable = () => {
         });
         setHasNextPage(response.pagination.hasNextPage);
 
-        // Update total records (estimate if not available)
         const estimatedTotal =
           response.pagination.totalRecords ||
           (response.data.length < pageSize && !response.pagination.hasNextPage
@@ -48,9 +55,6 @@ const AttendanceTable = () => {
         setTotalRecords(estimatedTotal);
 
         checkIfTimedOut(response.data);
-
-        // Update total approved hours based on the current page
-        calculateTotalApprovedHours(response.data);
       } else {
         setAttendanceData([]);
         setPagination({ page: 1, pageSize: 10 });
@@ -67,13 +71,31 @@ const AttendanceTable = () => {
     }
   };
 
-  const calculateTotalApprovedHours = (data) => {
-    const total = data
-      .filter((record) => record.status === "approved")
-      .reduce((sum, record) => sum + (parseFloat(record.total_hours) || 0), 0);
-
-    setTotalApprovedHours(total.toFixed(2));
+  const fetchStudentInfo = async () => {
+    const email = localStorage.getItem("email");
+    const id = localStorage.getItem("requester");
+    const token = localStorage.getItem("authToken");
+  
+    try {
+      const response = await getRequest(
+        `timesheets/get_approved_interns_timesheets?id=${id}&email=${email}&token=${token}`
+      );
+  
+      if (response?.data) {
+        setStudentInfo({
+          name: response.data.name,
+          school: response.data.school,
+        });
+  
+        if (Array.isArray(response.data.timesheets)) {
+          setApprovedTimesheets(response.data.timesheets);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch student info", error);
+    }
   };
+  
 
   const checkIfTimedOut = (data) => {
     const today = new Date().toISOString().split("T")[0];
@@ -108,7 +130,6 @@ const AttendanceTable = () => {
         (currentHour >= 12 && hasTimeInPM && hasTimeOutPM)
     );
   };
-  
 
   const convertTo12HourFormat = (time) => {
     if (!time) return "";
@@ -116,6 +137,267 @@ const AttendanceTable = () => {
     const suffix = hours >= 12 ? "PM" : "AM";
     const standardHours = hours % 12 || 12;
     return `${standardHours}:${minutes.toString().padStart(2, "0")} ${suffix}`;
+  };
+
+  useEffect(() => {
+    const total = approvedTimesheets.reduce(
+      (sum, record) => sum + (parseFloat(record.total_hours) || 0),
+      0
+    );
+    setTotalApprovedHours(total.toFixed(2));
+  }, [approvedTimesheets]);
+  
+
+  const handlePrint = () => {
+    const approvedData = approvedTimesheets;
+
+
+    const totalApprovedHours = approvedData.reduce(
+      (sum, record) => sum + (parseFloat(record.total_hours) || 0),
+      0
+    );
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    const printContent = `
+      <html>
+        <head>
+          <title>Approved Attendance</title>
+          <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-size: 14px; /* Default font size for web view */
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .header img {
+        width: 128px;
+        height: auto;
+      }
+      .header div {
+        line-height: 1.0;
+        font-size: 16px;
+      }
+      .title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20px 0;
+      }
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 1px solid #000;
+      }
+      .info-table td {
+        border: 1px solid #000;
+        padding: 8px;
+      }
+      .content-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-top: 20px;
+      }
+      .content-table th,
+      .content-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+      }
+      .content-table th {
+        background-color: rgb(255, 255, 255);
+      }
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+      }
+      .footer p {
+        font-weight: bold;
+      }
+      @media print {
+        body {
+          padding: 10mm;
+          font-size: 12pt; /* Slightly smaller font size for print */
+          margin: 0;
+        }
+
+        .header {
+          display: flex;
+
+          margin-bottom: 20px;
+        }
+
+        .header img {
+          width: 128px;
+          height: auto;
+        }
+
+        .title {
+          font-size: 20px; /* Adjusted for print */
+          margin: 15px 0;
+        }
+
+        .info-table td,
+        .content-table th,
+        .content-table td {
+          padding: 6px; /* Reduced padding for a more compact layout */
+        }
+
+        .footer {
+          margin-top: 30px;
+        }
+
+        .footer p {
+          font-size: 12pt;
+        }
+
+        @page {
+          size: auto;
+          margin: 10mm;
+          mso-footer-space: 1cm;
+          mso-header-space: 1cm;
+        }
+
+        /* Remove background images (if any) for print */
+        * {
+          -webkit-print-color-adjust: exact; /* Ensure proper color rendering in print */
+        }
+
+      }
+    </style>
+        </head>
+        <body>
+          <!-- Header Section -->
+          <div class="header">
+            <img src="https://i.ibb.co/237pgqWV/myt-logo-d51e67ca4d4eeea6450b.png" alt="MYT Logo" />
+            <div>
+              <p>MYT SoftDev Solutions, Inc.</p>
+              <p>301 The Greenery, Pope John Paul II Ave, Cebu City, 6000 Cebu</p>
+            </div>
+          </div>
+  
+          <!-- Title -->
+          <h2 class="title">DAILY TIME RECORD</h2>
+  
+          <!-- Info Section -->
+          <table class="info-table">
+            <tr>
+              <td><strong>Name of Student:</strong> ${studentInfo.name}</td>
+              <td><strong>Organization:</strong> ${studentInfo.school}</td>
+            </tr>
+            <tr>
+              <td><strong>Name of Supervisor: </strong></td>
+              <td><strong>Designation:</strong> Intern</td>
+            </tr>
+          
+          </table>
+  
+          <!-- Attendance Table -->
+          <table class="content-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Date</th>
+                <th rowspan="2">Setup</th>
+                <th colspan="2">Morning</th>
+                <th colspan="2">Afternoon</th>
+                <th rowspan="2"># of hours</th>
+                <th rowspan="2">Approved by</th>
+              </tr>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                <th>Start</th>
+                <th>End</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${approvedData
+                .map((record) => {
+                  const date = new Date(record.date).toLocaleDateString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }
+                  );
+
+                  const setup = (() => {
+                    const am = record.am_modality;
+                    const pm = record.pm_modality;
+
+                    if (am && pm) {
+                      return am === pm ? am : `${am} / ${pm}`;
+                    } else if (am) {
+                      return am;
+                    } else if (pm) {
+                      return pm;
+                    } else {
+                      return "";
+                    }
+                  })();
+
+                  const approvedBy = record.approved_by_name
+                    ? `${record.approved_by_name.split(" ").pop()} (${new Date(
+                        record.approved_on
+                      ).toLocaleDateString("en-US")})`
+                    : "";
+
+                  const convert = (time) => {
+                    if (!time) return "";
+                    const [h, m] = time.split(":").map(Number);
+                    const ampm = h >= 12 ? "PM" : "AM";
+                    const hour12 = h % 12 || 12;
+                    return `${hour12}:${m.toString().padStart(2, "0")} ${ampm}`;
+                  };
+
+                  return `
+                    <tr>
+                      <td>${date}</td>
+                      <td>${setup}</td>
+                      <td>${convert(record.time_in_am)}</td>
+                      <td>${convert(record.time_out_am)}</td>
+                      <td>${convert(record.time_in_pm)}</td>
+                      <td>${convert(record.time_out_pm)}</td>
+                      <td>${record.total_hours}</td>
+                      <td>${approvedBy}</td>
+                    </tr>
+                  `;
+                })
+                .join("")}
+            </tbody>
+          </table>
+  
+          <!-- Footer -->
+          <div class="footer">
+            <p>Total Approved Hours: ${totalApprovedHours.toFixed(2)} hrs</p>
+          </div>
+  
+         <script>
+  window.onload = function() {
+    window.print();
+  };
+  window.onafterprint = function() {
+    window.close();
+  };
+</script>
+
+        </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(printContent);
+    printWindow.document.close();
   };
 
   const columns = [
@@ -181,13 +463,9 @@ const AttendanceTable = () => {
       key: "status",
       render: (text) => {
         let color = "default";
-        if (text === "approved") {
-          color = "green";
-        } else if (text === "disapproved") {
-          color = "red";
-        } else if (text === "pending") {
-          color = "blue";
-        }
+        if (text === "approved") color = "green";
+        else if (text === "disapproved") color = "red";
+        else if (text === "pending") color = "blue";
 
         return text === "absent" ? "" : <Tag color={color}>{text}</Tag>;
       },
@@ -216,7 +494,6 @@ const AttendanceTable = () => {
       className={`attendance-container ${collapsed ? "collapsed" : "expanded"}`}
     >
       <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
-
       <div className="attendance-paper overflow-y-auto h-screen p-4">
         <div className="attendance-header flex items-center">
           <img src={mytLogo} alt="MYT Logo" className="attendance-logo" />
@@ -230,7 +507,7 @@ const AttendanceTable = () => {
           </div>
         </div>
 
-        <h3 className="attendance-title mt-4 text-lg font-semibold">
+        <h3 className="attendance-title text-lg font-semibold">
           DAILY TIME RECORD
         </h3>
 
@@ -243,10 +520,7 @@ const AttendanceTable = () => {
           >
             Time in/out
           </Button>
-          <Button
-            onClick={() => navigate("/print-approve")}
-            className="print-button"
-          >
+          <Button onClick={handlePrint} className="print-button">
             Print
           </Button>
         </div>
@@ -261,7 +535,6 @@ const AttendanceTable = () => {
               columns={columns}
               pagination={false}
               className="attendance-record-table min-w-[1000px]"
-              scroll={{ x: 1000 }}
             />
           </div>
 

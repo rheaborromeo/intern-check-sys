@@ -1,98 +1,32 @@
+/* Ensure body always has a vertical scrollbar */
+body {
+  overflow-y: auto;
+}
+
 .list-record-container {
-  @apply w-screen flex justify-end min-h-screen overflow-y-auto overflow-x-hidden;
+  @apply w-screen flex justify-end min-h-screen overflow-x-hidden;
 }
 
 .list-record-container.expanded .list-dashboard-content,
 .list-record-container.collapsed .list-dashboard-content {
   @apply ml-[6vw];
 }
-.list-attendance-table::before,
-.list-attendance-table::after,
-.list-attendance-table *::before,
-.list-attendance-table *::after {
+
+.list-attendance-table .ant-table-thead > tr > th::before,
+.list-attendance-table .ant-table-thead > tr > th::after {
   display: none !important;
-  content: none !important;
-  border: none !important;
-  box-shadow: none !important;
 }
 
-@media (max-width: 1024px) {
-  .list-record-container.expanded .list-dashboard-content,
-  .list-record-container.collapsed .list-dashboard-content {
-    @apply ml-[10vw];
-  }
+/* Adjustments for table overflow behavior */
+.list-table-wrapper {
+  @apply w-full overflow-x-auto;
+  max-height: none;
 }
 
-@media (max-width: 768px) {
-  .list-record-container.expanded .list-dashboard-content,
-  .list-record-container.collapsed .list-dashboard-content {
-    @apply ml-[3vw];
-  }
-
-  .list-header-container {
-    @apply flex-col justify-center items-center text-center mt-4 mb-4;
-  }
-
-  .list-header-text h2 {
-    @apply text-sm;
-  }
-
-  .list-header-text p {
-    @apply text-xs;
-  }
-
-  .list-myt-logo {
-    @apply m-0;
-  }
-
-  .button-container {
-    @apply justify-center mb-0;
-  }
-
-  .button-container button {
-    @apply w-24 h-10 px-2.5 text-sm;
-  }
-
-  .list-title-header {
-    @apply text-base mt-0;
-  }
-}
-
-@media (max-width: 480px) {
-  .list-record-container.expanded .list-dashboard-content,
-  .list-record-container.collapsed .list-dashboard-content {
-    @apply ml-[5vw];
-  }
-
-  .button-container {
-    @apply justify-center my-2.5;
-  }
-
-  .list-table-wrapper {
-    @apply max-h-[50vh] mt-4;
-  }
-
-  .list-title-header {
-    @apply text-sm mt-0;
-  }
-}
-
+/* Scroll behavior handled by the body */
 .list-dashboard-content {
-  @apply flex flex-col flex-grow p-5 overflow-x-hidden -translate-x-[10px];
-}
-
-@media (max-width: 1024px) {
-  .list-dashboard-content {
-    @apply p-2 m-0;
-  }
-
-  .list-table-wrapper {
-    @apply max-h-[50vh];
-  }
-
-  .list-title-header {
-    @apply text-base mt-4 mb-0;
-  }
+  @apply flex flex-col flex-grow p-5 overflow-x-hidden overflow-y-auto;
+  height: 100vh;
 }
 
 .list-header-container {
@@ -106,27 +40,23 @@
 
 .list-header-text p,
 .list-company-address {
-  @apply text-sm font-normal text-gray-800 mb-0;
+  @apply text-base font-normal text-gray-800 mb-0;
 }
 
 .list-myt-logo {
   @apply w-32 h-auto mr-6 mt-2.5;
 }
 
-.list-table-wrapper {
-  @apply overflow-auto max-h-[60vh] w-full;
-}
-
 .list-title-header {
-  @apply text-center text-xl font-bold uppercase mt-8;
+  @apply text-lg font-bold uppercase mt-8 text-center;
 }
 
 .button-container {
-  @apply flex justify-end mb-2.5 mr-5;
+  @apply flex justify-end mb-2.5 mr-5 w-full;
 }
 
 .button-container button {
-  @apply px-8 h-[42px] py-2.5 text-sm ml-2.5;
+  @apply px-8 h-[42px] py-2.5 text-base ml-2.5;
 }
 
 .list-attendance-table .ant-table {
@@ -143,4 +73,128 @@
 
 .list-attendance-table .ant-table-tbody > tr:hover > td {
   @apply bg-gray-100;
+}
+
+@media (max-width: 1280px) {
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[8vw];
+  }
+
+  .list-dashboard-content {
+    @apply p-2 m-0;
+  }
+
+  .list-title-header {
+    @apply text-base mt-4 mb-0;
+  }
+
+  .list-header-text h2 {
+    @apply text-base font-semibold;
+  }
+
+  .list-header-text p {
+    @apply text-sm;
+  }
+
+  .list-myt-logo {
+    @apply w-40 h-auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[8vw];
+  }
+
+  .list-dashboard-content {
+    @apply p-2 m-0;
+  }
+
+  .list-header-container {
+    @apply flex-col justify-center items-center text-center mt-4 mb-4;
+  }
+
+  .list-header-text h2 {
+    @apply text-base font-semibold;
+  }
+
+  .list-header-text p {
+    @apply text-sm;
+  }
+
+  .list-myt-logo {
+    @apply w-40 h-auto;
+  }
+
+  .button-container {
+    @apply flex justify-center items-center w-full mb-2 mt-2;
+  }
+
+  .button-container button {
+    @apply w-28 h-11 px-3 text-base mt-2;
+  }
+
+  .list-title-header {
+    @apply text-base mt-0;
+  }
+
+  .ant-pagination {
+    @apply mt-4;
+  }
+}
+
+@media (max-width: 768px) {
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[1vw];
+  }
+
+  .list-header-container {
+    @apply flex-col justify-center items-center text-center mt-4 mb-4;
+  }
+
+  .list-header-text h2 {
+    @apply text-sm font-semibold;
+  }
+
+  .list-header-text p {
+    @apply text-xs;
+  }
+
+  .list-myt-logo {
+    @apply w-36 h-auto;
+  }
+
+  .button-container {
+    @apply flex justify-center items-center w-full mb-2;
+  }
+
+  .button-container button {
+    @apply w-24 h-10 px-2.5 text-sm;
+  }
+
+  .list-title-header {
+    @apply text-sm mt-0;
+  }
+}
+
+@media (max-width: 480px) {
+  .list-record-container.expanded .list-dashboard-content,
+  .list-record-container.collapsed .list-dashboard-content {
+    @apply ml-[0vw];
+  }
+
+  .button-container {
+    @apply flex justify-center items-center w-full my-2.5;
+  }
+
+  .button-container button {
+    @apply w-20 h-9 px-2 text-xs;
+  }
+
+  .list-title-header {
+    @apply text-xs mt-0;
+  }
 }

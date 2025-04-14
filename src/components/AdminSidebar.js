@@ -9,7 +9,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import internCheckLogo from "../image/inchck_logo.png";
 import { postRequest } from "../utils/apicalls";
-import "../styles/Sidebar.css"; // Reuse Sidebar styles
+import "../styles/sidebar.css";
 
 const { Sider } = Layout;
 

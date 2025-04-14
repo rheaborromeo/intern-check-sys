@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import { CloseOutlined } from "@ant-design/icons"; // Import the close icon from Ant Design
+import { useParams, useNavigate } from "react-router-dom";
+import { CloseOutlined } from "@ant-design/icons"; 
 import { getRequest } from "../utils/apicalls";
-import "../styles/InternDetail.css";
+import "../styles/interndetail.css";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
 
 const InternDetail = () => {
@@ -11,7 +11,7 @@ const InternDetail = () => {
   const [timesheets, setTimesheets] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("authToken");
-  const navigate = useNavigate(); // Use useNavigate for navigation
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchInternDetails = async () => {
@@ -43,7 +43,6 @@ const InternDetail = () => {
     fetchTimesheets();
   }, [id, token]);
 
-  // Function to navigate back to the /interns page when Close Icon is clicked
   const goBack = () => {
     navigate("/interns");
   };

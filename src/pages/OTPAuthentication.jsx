@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Form, Input, Button, message, Spin, Statistic } from "antd";
 import { postRequest } from "../utils/apicalls";
-import "../styles/OTPAuthentication.css";
+import "../styles/otpauthentication.css";
 
 const { Countdown } = Statistic;
 

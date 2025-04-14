@@ -3,7 +3,7 @@ import { postRequest } from "../utils/apicalls";
 import { Button, message } from "antd";
 import { ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import "../styles/MarkAttendance.css"; // This contains the regular styles
+import "../styles/markattendance.css";
 import timelog from "../image/Time management.png";
 
 const MarkAttendance = () => {
@@ -58,7 +58,6 @@ const MarkAttendance = () => {
           position: "top-center",
           autoClose: 3000,
         });
-        // Ensure message closes after the duration
         setTimeout(() => {
           message.destroy();
         }, 3000);

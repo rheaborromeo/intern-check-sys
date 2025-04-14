@@ -3,7 +3,7 @@ import { postRequest } from "../utils/apicalls";
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from "../image/logo_.png";
-import "../styles/internlogin.css"; // Import the separate TailwindCSS file
+import "../styles/internlogin.css";
 
 const InternLogin = () => {
   const [loading, setLoading] = useState(false);

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Empty, Spin, notification, message } from "antd";
+import { Table, Button, Empty, Spin, Pagination } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getRequest, postRequest } from "../utils/apicalls";
+import { getRequest } from "../utils/apicalls";
 import AdminSidebar from "../components/AdminSidebar";
 import mytLogo from "../image/myt logo.d51e67ca4d4eeea6450b.png";
-import "../styles/InternsTable.css";
+import "../styles/internstable.css";
 
 const InternsTable = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
   const fetchInterns = async () => {
@@ -28,9 +30,7 @@ const InternsTable = () => {
           id: intern.id,
           name: `${intern.first_name} ${
             intern.middle_name ? intern.middle_name.charAt(0) + "." : ""
-          } ${intern.last_name}${
-            intern.suffix ? ", " + intern.suffix : ""
-          }`.trim(),
+          } ${intern.last_name}${intern.suffix ? ", " + intern.suffix : ""}`.trim(),
           school: intern.school || "N/A",
           email: intern.email || "N/A",
           type: intern.type || "N/A",
@@ -96,11 +96,19 @@ const InternsTable = () => {
     },
   ];
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const paginatedData = userData.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div
-      className={`list-record-container ${
-        collapsed ? "collapsed" : "expanded"
-      }`}
+      className={`list-record-container ${collapsed ? "collapsed" : "expanded"}`}
     >
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
 
@@ -117,9 +125,7 @@ const InternsTable = () => {
           </div>
         </div>
 
-        <h3 className="list-title-header text-lg font-semibold">
-          Interns Record
-        </h3>
+        <h3 className="list-title-header text-lg font-semibold">Interns Record</h3>
 
         <div className="button-container">
           <Button
@@ -130,10 +136,11 @@ const InternsTable = () => {
             Add Intern
           </Button>
         </div>
+
         <div className="list-table-wrapper">
           <Spin spinning={loading} size="large">
             <Table
-              dataSource={userData.map((item, index) => ({
+              dataSource={paginatedData.map((item, index) => ({
                 ...item,
                 key: index,
               }))}
@@ -147,6 +154,17 @@ const InternsTable = () => {
               pagination={false}
             />
           </Spin>
+        </div>
+
+        <div className="pagination-container mt-4">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={userData.length}
+            onChange={handlePageChange}
+            showSizeChanger
+            pageSizeOptions={["10", "20", "30"]}
+          />
         </div>
       </div>
     </div>
